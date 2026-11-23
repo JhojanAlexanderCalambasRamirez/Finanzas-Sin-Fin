@@ -7,7 +7,7 @@ import { accountTypes, mainAccountId, accountBalances, monthEnd, validLedger, va
 import { categoryList, saveCategory, filterMovements } from './movement-tools.js';
 import { parseMoneyInput, validText, validDate } from './validation.js';
 import { recurrenceList, previewRecurrences, generateRecurrences } from './recurrences.js';
-import { budgetList, budgetSummary } from './budgets.js';
+import { budgetList, budgetSummary, previewBudgetCopy, copyBudgets } from './budgets.js';
 import { goalList, contributionList, goalSummary, validGoals } from './goals.js';
 import { debtList, paymentList, validDebts, debtSummary, recordDebtPayment, removeTransactionWithPayment } from './debts.js';
 import { monthlyHistory, movementsCsv } from './reports.js';
@@ -15,6 +15,7 @@ import { monthlyHistory, movementsCsv } from './reports.js';
 const $ = selector => document.querySelector(selector);
 const store = createLedgerStore();
 let state = { accounts: [], transactions: [], transfers: [], categories: [], recurrences: [], budgets: [], goals: [], contributions: [], debts: [], debtPayments: [] };
+let budgetCopyPreview = null;
 let ready = false;
 let saving = false;
 let processing = false;
@@ -55,8 +56,9 @@ function setBusy() {
   $('#reload-data').hidden = ready || saving;
   $('#reload-data').disabled = saving || processing;
   for (const form of document.querySelectorAll('dialog form')) form.setAttribute('aria-busy', String(saving));
-  for (const button of document.querySelectorAll('#add, #first, #new-account, #new-category, #new-rule, #new-budget, #new-goal, #new-debt, #debt-cards button, #debt-payment-list button, #goal-cards button, #contribution-list button, #budget-cards button, #preview-rules, #export, #import, #migrate, #rows button, #account-cards button, #category-list button, #rule-list button, button[type="submit"]')) button.disabled = disabled;
+  for (const button of document.querySelectorAll('#add, #first, #new-account, #new-category, #new-rule, #new-budget, #copy-budgets, #new-goal, #new-debt, #debt-cards button, #debt-payment-list button, #goal-cards button, #contribution-list button, #budget-cards button, #preview-rules, #export, #import, #migrate, #rows button, #account-cards button, #category-list button, #rule-list button, button[type="submit"]')) button.disabled = disabled;
   $('#confirm-generation').disabled = disabled || !previewCount;
+  $('#confirm-budget-copy').disabled = disabled || !budgetCopyPreview?.candidates.length;
   $('#export-csv').disabled = disabled;
   $('#previous-page').disabled = disabled || page <= 1;
   $('#next-page').disabled = disabled || page >= pageCount;
@@ -71,7 +73,7 @@ async function persist(next) {
   if (saving || !ready) return false;
   if (!validLedger(next)) {
     const message = 'Revisa las cuentas, categorías, montos y fechas. Los movimientos requieren categorías existentes y fechas desde el saldo inicial. Origen y destino deben ser distintos.';
-    for (const id of ['#error', '#account-error', '#category-error', '#rule-error', '#generation-error', '#budget-error', '#goal-error', '#contribution-error', '#history-error', '#debt-error', '#debt-payment-error', '#debt-history-error']) $(id).textContent = message;
+    for (const id of ['#error', '#account-error', '#category-error', '#rule-error', '#generation-error', '#budget-error', '#goal-error', '#contribution-error', '#history-error', '#debt-error', '#debt-payment-error', '#debt-history-error', '#budget-copy-error']) $(id).textContent = message;
     notify(message); return false;
   }
   saving = true; setBusy();
@@ -79,7 +81,7 @@ async function persist(next) {
   catch (error) {
     ready = false;
     const message = `No se pudo confirmar el guardado. ${error.message}`;
-    for (const id of ['#error', '#account-error', '#category-error', '#rule-error', '#generation-error', '#budget-error', '#goal-error', '#contribution-error', '#history-error', '#debt-error', '#debt-payment-error', '#debt-history-error']) $(id).textContent = message;
+    for (const id of ['#error', '#account-error', '#category-error', '#rule-error', '#generation-error', '#budget-error', '#goal-error', '#contribution-error', '#history-error', '#debt-error', '#debt-payment-error', '#debt-history-error', '#budget-copy-error']) $(id).textContent = message;
     notify(message); return false;
   } finally { saving = false; setBusy(); }
 }
@@ -714,3 +716,23 @@ function renderDashboard() {
 $('#reload-data').addEventListener('click', () => location.reload());
 
 $('#loan-form').addEventListener('input', () => { $('#loan-result').hidden = true; $('#loan-error').textContent = ''; });
+
+$('#copy-budgets').addEventListener('click', () => {
+  if (!ready || saving || processing) return;
+  const history = monthlyHistory(state, $('#month').value, 2);
+  if (history.length < 2) { notify('No hay un mes anterior válido para copiar.'); return; }
+  budgetCopyPreview = previewBudgetCopy(state, history[0].month, $('#month').value);
+  $('#budget-copy-error').textContent = '';
+  $('#budget-copy-summary').textContent = 'De ' + budgetCopyPreview.sourceMonth + ' a ' + budgetCopyPreview.targetMonth + ': ' + budgetCopyPreview.candidates.length + ' límite(s) para copiar. Omitidos: ' + budgetCopyPreview.skipped + '. Si no hay candidatos, crea un límite o selecciona otro periodo.';
+  $('#budget-copy-list').replaceChildren(...budgetCopyPreview.candidates.map(item => { const li = document.createElement('li'); li.textContent = item.category + ': ' + money(item.amount); return li; }));
+  setBusy(); $('#budget-copy-dialog').showModal();
+});
+$('#confirm-budget-copy').addEventListener('click', async () => {
+  if (!ready || saving || processing || !budgetCopyPreview?.candidates.length) return;
+  try {
+    const preview = budgetCopyPreview;
+    const next = copyBudgets(state, preview.sourceMonth, preview.targetMonth, () => crypto.randomUUID());
+    if (await persist(next)) { $('#budget-copy-dialog').close(); render(); notify('Límites copiados. Los gastos y límites existentes se conservaron.'); }
+  } catch (error) { $('#budget-copy-error').textContent = error.message; }
+});
+$('#budget-copy-dialog').addEventListener('close', () => { budgetCopyPreview = null; setBusy(); });

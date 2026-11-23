@@ -2,7 +2,7 @@
 
 ## Estado actual
 
-Version 0.9: dashboard con prioridades, comparacion mensual y feedback visible; simulador de prestamos. JSON version 7 y SQLite esquema 7. Resultado: 45 pruebas unitarias y 35 funcionales aprobadas. Consulta QA.md y MVP.md.
+Version 0.9: dashboard con prioridades, comparacion mensual y feedback visible; simulador de prestamos. JSON version 7 y SQLite esquema 7. Resultado: 45 pruebas unitarias y 37 funcionales aprobadas. Consulta QA.md y MVP.md.
 
 ## Checklist de evaluacion continua
 
@@ -11,7 +11,7 @@ Version 0.9: dashboard con prioridades, comparacion mensual y feedback visible; 
 - [x] Corregir consultas simultaneas durante un guardado del cliente.
 - [x] Informar el limite de movimientos antes de generar recurrencias.
 - [x] Verificar flujo completo de registro, presupuesto, meta, recurrencia, respaldo y restauracion.
-- [x] Ejecutar pruebas finales: 45 unitarias y 35 funcionales, cero fallos.
+- [x] Ejecutar pruebas finales: 45 unitarias y 37 funcionales, cero fallos.
 - [x] Validar sintaxis de la interfaz y configuracion Docker Compose.
 - [ ] Construir la imagen, validar navegador, movil, scroll y teclado.
 - [ ] Ejecutar pruebas de red real y comprobar reinicio del contenedor.
@@ -136,3 +136,11 @@ Configuracion por entorno, HTTPS, respaldos y prueba documentada de restauracion
 - [x] README estructurado con creditos al autor y guia de instalacion.
 - [x] Revision de flujo documentada en docs/UX-REVIEW.md.
 - [x] Remoto configurado; entrega preparada sobre el commit inicial existente.
+
+## Copia mensual de limites
+
+- [x] Vista previa y confirmacion explicita.
+- [x] Omite limites existentes y categorias archivadas.
+- [x] Repetir no duplica ni modifica gastos.
+- [x] Pruebas de entradas invalidas, colisiones, SQLite y respaldo.
+- [ ] Validacion del nuevo dialogo en navegador.

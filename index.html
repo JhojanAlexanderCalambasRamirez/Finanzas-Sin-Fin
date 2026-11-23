@@ -67,7 +67,7 @@
       <div class="accounts-total">Saldo total <strong id="total-balance">$ 0</strong></div><div id="account-cards" class="account-cards"></div>
     </section>
     <section class="panel budgets-panel" id="budgets-panel">
-      <div class="panel-heading"><div><h2>Presupuestos del mes</h2><p>Compara tus límites con los gastos de todas tus cuentas.</p></div><button id="new-budget" class="secondary" disabled>＋ Nuevo límite</button></div>
+      <div class="panel-heading"><div><h2>Presupuestos del mes</h2><p>Compara tus límites con los gastos de todas tus cuentas.</p></div><button id="copy-budgets" class="secondary" type="button" disabled>Copiar mes anterior</button><button id="new-budget" class="secondary" disabled>＋ Nuevo límite</button></div>
       <p id="budget-summary" class="budget-summary" role="status"></p><div id="budget-cards" class="account-cards"></div>
       <p class="budget-note">Los ingresos, transferencias y saldos iniciales no consumen presupuesto. Los gastos sin límite asignado se muestran por separado.</p>
     </section>
@@ -220,6 +220,13 @@
     <h3>Plan de cuotas al cierre del mes</h3><ul id="installment-list" class="preview-list"></ul>
     <h3>Pagos asociados</h3><p class="field-help">Incluye pagos futuros. Desvincular conserva el gasto y aumenta el pendiente de la deuda. Edita o elimina el gasto desde Movimientos.</p>
     <ul id="debt-payment-list" class="preview-list"></ul><p id="debt-history-error" role="alert"></p>
+  </dialog>
+  <dialog id="budget-copy-dialog" aria-labelledby="budget-copy-title">
+    <div class="dialog-heading"><h2 id="budget-copy-title">Copiar límites mensuales</h2><button type="button" data-close="budget-copy-dialog" class="close" aria-label="Cerrar copia de presupuestos">×</button></div>
+    <p id="budget-copy-summary" class="form-intro"></p><ul id="budget-copy-list" class="preview-list"></ul>
+    <p class="field-help">Se copian solo los límites faltantes de categorías activas. Los gastos y límites existentes se conservan.</p>
+    <p id="budget-copy-error" role="alert"></p>
+    <div class="budget-actions"><button type="button" data-close="budget-copy-dialog" class="secondary" autofocus>Cancelar</button><button id="confirm-budget-copy" type="button" class="primary" disabled>Confirmar copia</button></div>
   </dialog>
   <script type="module" src="/app.js"></script>
 </body></html>

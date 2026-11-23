@@ -215,3 +215,7 @@ Consulta GITHUB.md para la descripcion y checklist del repositorio. El workflow 
 El resumen incluye balance como porcentaje de ingresos (sin porcentaje si no hubo ingresos), variacion absoluta del gasto frente al mes anterior y deuda pendiente de obligaciones activas al cierre del periodo. Las alertas enlazan a presupuestos, deudas y cuentas. Los filtros del listado no alteran estos indicadores. Las fechas futuras ya registradas cuentan dentro del mes correspondiente.
 
 El simulador convierte una tasa efectiva anual de 0 a 100 % a tasa mensual, admite de 1 a 360 meses y ajusta el redondeo en la ultima cuota. Excluye seguros y comisiones; no guarda deudas ni desembolsos. Al cambiar los parametros se oculta el resultado anterior hasta recalcular. Consulta MVP.md para los criterios de cierre.
+
+## Copiar presupuestos entre meses
+
+En Presupuestos, selecciona el periodo destino y pulsa Copiar mes anterior. La vista previa muestra categorias e importes y requiere confirmacion. Solo copia limites de categorias activas que aun no tienen presupuesto en el destino. No copia gastos ni modifica limites existentes; repetir la operacion no duplica registros.

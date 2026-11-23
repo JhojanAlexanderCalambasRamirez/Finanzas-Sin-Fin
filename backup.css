@@ -34,7 +34,8 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .form-intro{line-height:1.7}
 .field-help{font-size:11px;color:#758369;line-height:1.7;margin:-6px 0 18px}
 html{scrollbar-gutter:stable;scroll-behavior:smooth}
-body:has(dialog[open]){overflow:hidden}
+dialog:modal{overscroll-behavior:contain}
+dialog::backdrop{overflow:hidden;overscroll-behavior:contain}
 .sidebar{overflow-y:auto;overscroll-behavior:contain}
 .sidebar>*{flex-shrink:0}
 main,.panel,.heading>div{min-width:0}
@@ -130,3 +131,5 @@ dialog{max-height:calc(100dvh - 2rem);border-radius:var(--radius)}
 td:last-child{white-space:nowrap}
 td:last-child .secondary{padding:6px 9px;margin-right:7px}
 @media(max-width:650px){.backup-bar span{flex-basis:100%}}
+
+#budget-copy-error{color:#a02d26;font-size:.875rem}.panel-heading:has(#copy-budgets){flex-wrap:wrap}.panel-heading:has(#copy-budgets)>div{flex:1;min-inline-size:min(100%,15rem)}

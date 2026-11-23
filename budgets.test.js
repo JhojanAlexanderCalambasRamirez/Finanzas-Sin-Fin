@@ -6,12 +6,41 @@ import { tmpdir } from 'node:os';
 import { DatabaseSync } from 'node:sqlite';
 import { defaultAccount, validLedger, ledgerBackup, parseLedgerBackup, mergeLedger } from './ledger.js';
 import { defaultCategories, saveCategory } from './movement-tools.js';
-import { budgetSummary } from './budgets.js';
+import { budgetSummary, previewBudgetCopy, copyBudgets } from './budgets.js';
 import { openDatabase } from './database.js';
 
 const budget = { id: 'budget', month: '2026-11', category: 'Vivienda', amount: 100000 };
 const expense = { id: 'rent', type: 'expense', description: 'Arriendo', amount: 80000, date: '2026-11-15', category: 'Vivienda', accountId: 'principal' };
 const fixture = () => ({ accounts: [defaultAccount()], categories: defaultCategories(), transactions: [expense], transfers: [], recurrences: [], budgets: [budget], goals: [], contributions: [], debts: [], debtPayments: [] });
+
+test('copiar limites conserva origen, omite existentes y archivados, y repetir no duplica', () => {
+  const state = fixture();
+  state.budgets.push({ ...budget, id: 'food', category: 'Alimentación' }, { ...budget, id: 'other', category: 'Ocio' });
+  state.categories.find(item => item.name === 'Ocio').archived = true;
+  state.budgets.push({ ...budget, id: 'target', month: '2026-12', amount: 90000 });
+  const original = structuredClone(state);
+  const preview = previewBudgetCopy(state, '2026-11', '2026-12');
+  assert.equal(preview.candidates.length, 1); assert.equal(preview.skipped, 2);
+  const next = copyBudgets(state, '2026-11', '2026-12', () => 'copy');
+  assert.deepEqual(state, original); assert.equal(next.budgets.at(-1).category, 'Alimentación');
+  assert.equal(next.budgets.find(item => item.id === 'target').amount, 90000);
+  assert.deepEqual(copyBudgets(next, '2026-11', '2026-12', () => 'unused'), next);
+  assert.equal(validLedger(next), true);
+});
+
+test('copiar limites rechaza meses y colisiones sin modificar datos; SQLite y respaldo conservan copia', () => {
+  const state = fixture(); const original = structuredClone(state);
+  for (const source of ['2026-13', '0000-01', null, '2026-12']) assert.throws(() => copyBudgets(state, source, '2026-12', () => 'copy'));
+  assert.throws(() => copyBudgets(state, '2026-11', '2026-12', () => budget.id));
+  assert.deepEqual(state, original);
+  const database = openDatabase(':memory:');
+  try {
+    const next = copyBudgets(state, '2026-11', '2026-12', () => 'copy');
+    const saved = database.replaceState(next, database.readState().revision);
+    assert.equal(budgetSummary(saved, '2026-12')[0].spent, 0);
+    assert.deepEqual(parseLedgerBackup(JSON.stringify(ledgerBackup(saved))).budgets, saved.budgets);
+  } finally { database.close(); }
+});
 test('consumo incluye solo gastos del mes y categoria; ingresos y otros meses no descuentan', () => {
   const state = fixture(); state.transactions.push({ ...expense, id: 'income', type: 'income', amount: 50000 }, { ...expense, id: 'old', date: '2026-10-15' }, { ...expense, id: 'other', category: 'Ocio' });
   const summary = budgetSummary(state, '2026-11')[0];

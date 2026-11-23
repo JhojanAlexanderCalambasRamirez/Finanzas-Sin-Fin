@@ -2,7 +2,7 @@
 
 ## Resultados automaticos
 
-Evaluacion realizada el 23 de noviembre de 2026. La suite previa de 53 pruebas paso antes de modificar el codigo. Resultado final con Node.js 24: **45 pruebas unitarias y 35 funcionales aprobadas, cero fallos y cero omitidas**. La configuracion Compose y la sintaxis JavaScript se validaron. La suite utiliza archivos SQLite reales. Las pruebas de API usan transporte simulado y, adicionalmente, network.test.js levanta un servidor HTTP real en un puerto efimero sobre loopback. Esto no sustituye la prueba de navegador o Docker.
+Evaluacion realizada el 23 de noviembre de 2026. La suite previa de 53 pruebas paso antes de modificar el codigo. Resultado final con Node.js 24: **45 pruebas unitarias y 37 funcionales aprobadas, cero fallos y cero omitidas**. La configuracion Compose y la sintaxis JavaScript se validaron. La suite utiliza archivos SQLite reales. Las pruebas de API usan transporte simulado y, adicionalmente, network.test.js levanta un servidor HTTP real en un puerto efimero sobre loopback. Esto no sustituye la prueba de navegador o Docker.
 
 ## Checklist funcional actual
 
@@ -126,5 +126,13 @@ Los datos del test HTTP se crean en una base temporal separada y se eliminan al 
 - [x] Repetir aprovisionamiento conserva datos y revision.
 - [x] Comando db:init probado como proceso real.
 - [x] Orden DOM: resumen, movimientos, cuentas; categorias y respaldos accesibles desde menu.
-- [x] 80 pruebas totales aprobadas antes de publicar.
+- [x] 82 pruebas totales aprobadas antes de publicar.
 - [ ] Validacion visual y contenedor Docker completos.
+
+## Copia mensual de limites
+
+- [x] Vista previa y confirmacion explicita.
+- [x] Omite limites existentes y categorias archivadas.
+- [x] Repetir no duplica ni modifica gastos.
+- [x] Pruebas de entradas invalidas, colisiones, SQLite y respaldo.
+- [ ] Validacion del nuevo dialogo en navegador.

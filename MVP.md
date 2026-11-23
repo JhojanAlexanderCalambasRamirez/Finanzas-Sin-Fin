@@ -17,7 +17,7 @@ MVP publicado: varias personas acceden por Internet con identidad, sesiones prot
 - [x] Dashboard con comparacion mensual y alertas accionables.
 - [x] Validacion de entradas y control de revision contra sobrescrituras.
 - [x] SQLite, migraciones y respaldos JSON portables.
-- [x] 45 pruebas unitarias y 35 funcionales, incluida una prueba HTTP real.
+- [x] 45 pruebas unitarias y 37 funcionales, incluida una prueba HTTP real.
 
 ## Cuatro bloques para cerrar el MVP local
 
@@ -56,3 +56,11 @@ MVP publicado: varias personas acceden por Internet con identidad, sesiones prot
 - [ ] HTTPS, gestion de secretos y operacion de respaldos.
 
 No se asigna un porcentaje de avance: el codigo implementado y la validacion de uso son criterios diferentes. El MVP local tiene su nucleo funcional; los cuatro bloques anteriores determinan su robustez. El MVP publicado agrega los controles de acceso y operacion indicados.
+
+## Copia mensual de limites
+
+- [x] Vista previa y confirmacion explicita.
+- [x] Omite limites existentes y categorias archivadas.
+- [x] Repetir no duplica ni modifica gastos.
+- [x] Pruebas de entradas invalidas, colisiones, SQLite y respaldo.
+- [ ] Validacion del nuevo dialogo en navegador.

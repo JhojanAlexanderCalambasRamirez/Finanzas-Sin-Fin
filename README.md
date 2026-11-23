@@ -177,3 +177,7 @@ No expongas esta versión directamente a Internet. Ofrecerla a terceros requiere
 La documentación toma como referencia la organización de sus README de [MacNTFS](https://github.com/JhojanAlexanderCalambasRamirez/MacNTFS) y [MdConverter](https://github.com/JhojanAlexanderCalambasRamirez/MdConverter): problema, solución, instalación, arquitectura y límites. Esto no implica reutilización de su código.
 
 Desarrollo con asistencia de Codex. Node.js, SQLite y Docker pertenecen a sus respectivos autores y comunidades. La licencia de distribución del proyecto está pendiente; no se hereda automáticamente la de otros repositorios.
+
+## Copiar presupuestos entre meses
+
+En Presupuestos, selecciona el periodo destino y pulsa Copiar mes anterior. La vista previa muestra categorias e importes y requiere confirmacion. Solo copia limites de categorias activas que aun no tienen presupuesto en el destino. No copia gastos ni modifica limites existentes; repetir la operacion no duplica registros.
