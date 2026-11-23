@@ -13,7 +13,7 @@ Un único PC ejecuta el servidor y abre SQLite. Los demás usan su navegador con
 5. Ejecuta desde la carpeta del proyecto:
 
 ```powershell
-node --env-file=lan.env src/server/main.js
+npm run start:lan
 ```
 
 El servidor falla al arrancar si faltan certificado, clave o credenciales válidas en modo LAN. No instala certificados, cambia firewall ni abre puertos automáticamente.
@@ -41,3 +41,5 @@ Cada navegador lee la misma base central, pero no hay sincronización automátic
 Se prueban HTTPS real con un certificado exclusivamente de pruebas, autenticación, origen, lectura y escritura en SQLite. No se ha comprobado conexión entre tus equipos físicos, confianza de certificados, firewall o ejecución Docker con TLS.
 
 El modo local y Compose habituales conservan sus valores predeterminados. Este procedimiento de LAN inicia Node directamente; el contenedor predeterminado no monta certificados ni configura el modo LAN por sí solo. No está preparado para publicarlo directamente en Internet.
+
+Si lan.env no existe, el comando lo crea a partir del ejemplo y muestra lo que falta antes de iniciar. Edita ese archivo para completar la direccion real, la contrasena y los certificados. Si ya existe, nunca se sobrescribe automaticamente.

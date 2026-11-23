@@ -10,7 +10,7 @@
     "check": "node scripts/check.mjs",
     "test:functional": "node --test tests/integration/*.test.js",
     "db:init": "node scripts/init-db.mjs",
-    "start:lan": "node --env-file=lan.env src/server/main.js"
+    "start:lan": "node scripts/start-lan.mjs"
   },
   "engines": {
     "node": ">=24"
