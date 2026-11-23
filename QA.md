@@ -181,3 +181,10 @@ Verificacion del flujo simplificado: 95 pruebas aprobadas (54 unitarias y 41 de 
 - [ ] Recuperacion de contrasena, revision visual completa y despliegue publico.
 
 Validacion 0.13: 101 pruebas aprobadas (56 unitarias y 45 de integracion); 86 archivos JavaScript y 184 identificadores HTML comprobados.
+
+## Ubicacion de respaldos
+
+- [x] Elegir nombre y carpeta antes de consultar el respaldo actualizado.
+- [x] Confirmar guardado solo despues de cerrar el archivo; cancelacion y fallo de disco sin falso exito.
+- [x] Alternativa de descarga con instrucciones Ctrl+J y Mostrar en carpeta.
+- [x] Pruebas automatizadas de selector, cancelacion, fallo de escritura y descarga alternativa.

@@ -1,4 +1,5 @@
 import { prepareImport } from '../../../domain/import-plan.js';
+import { saveJsonBackup } from '../../shared/save-backup.js';
 import { createTransactionStore, storageKey } from '../../data/legacy-store.js';
 import { createLedgerStore } from '../../data/api-store.js';
 import {
@@ -24,6 +25,9 @@ export function createBackupsController({
   isProcessing,
 }) {
   let pendingImport = null;
+  const locationFeedback = (message) => {
+    $('#backup-location').textContent = message;
+  };
   function downloadBackup(backup, suffix = '') {
     const url = URL.createObjectURL(
       new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }),
@@ -33,6 +37,9 @@ export function createBackupsController({
     link.download = `finanzas-sin-fin${suffix}-${today()}.json`;
     document.body.append(link);
     link.click();
+    locationFeedback(
+      `Descarga solicitada: ${link.download}. Abre Ctrl+J en Windows y pulsa Mostrar en carpeta. Se usa la carpeta de descargas configurada en tu navegador.`,
+    );
     link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
@@ -40,12 +47,21 @@ export function createBackupsController({
     setProcessing(true);
     setBusy();
     try {
-      downloadBackup(ledgerBackup(await createLedgerStore().load()));
+      await saveJsonBackup(
+        `finanzas-sin-fin-${today()}.json`,
+        async () => ledgerBackup(await createLedgerStore().load()),
+        locationFeedback,
+      );
       notify(
         'Archivo completo preparado: todos los meses, cuentas, movimientos, reglas, presupuestos, metas, deudas y pagos.',
       );
-    } catch {
-      notify('No se pudo preparar el respaldo actualizado. Comprueba la conexión al servidor.');
+    } catch (error) {
+      const message =
+        error.name === 'AbortError'
+          ? 'Guardado cancelado. No se creó una copia.'
+          : 'No se pudo guardar el respaldo. Comprueba la conexión y los permisos de la carpeta.';
+      locationFeedback(message);
+      notify(message);
     } finally {
       setProcessing(false);
       setBusy();
