@@ -225,7 +225,10 @@ async function initialize() {
     $('.private').textContent = 'Datos cargados del servidor';
     notify('Cuentas y movimientos cargados.');
     try {
-      const local = createTransactionStore(localStorage).load();
+      const local =
+        document.documentElement?.dataset.profileRole === 'admin'
+          ? createTransactionStore(localStorage).load()
+          : [];
       $('#migrate').hidden = local.length === 0;
       if (local.length)
         notify(

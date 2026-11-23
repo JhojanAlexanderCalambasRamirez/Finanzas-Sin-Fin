@@ -177,3 +177,15 @@ Configuracion por entorno, HTTPS, respaldos y prueba documentada de restauracion
 - [ ] Prueba visual completa en navegador.
 
 Verificacion del flujo simplificado: 95 pruebas aprobadas (54 unitarias y 41 de integracion). Se prueba un JSON completo entre dos bases independientes, con todos los modulos, saldos y reapertura del destino.
+
+## Perfiles 0.13
+
+- [x] Primer administrador conserva datos anteriores; perfiles nuevos independientes.
+- [x] Login, logout y sesiones persistentes de 12 horas, revocacion y limite de intentos.
+- [x] Cambio de nombre, usuario y contrasena propia; crear y desactivar/reactivar perfiles.
+- [x] Roles y acceso a finanzas comprobados en el servidor, incluidos endpoints anteriores.
+- [x] Pruebas de aislamiento, alta concurrente, vencimiento y migracion.
+- [x] Bootstrap de login y formularios de perfiles con DOM simulado.
+- [ ] Recuperacion de contrasena, revision visual completa y despliegue publico.
+
+Validacion 0.13: 101 pruebas aprobadas (56 unitarias y 45 de integracion); 86 archivos JavaScript y 184 identificadores HTML comprobados.

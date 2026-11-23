@@ -86,3 +86,7 @@ El DOM simulado no certifica aspecto, scroll, foco real ni accesibilidad complet
 ## Entrega y copia de publicación
 
 La fuente de trabajo es `src/` en la carpeta principal. `publication-worktree` es una copia excluida de Git utilizada para preparar commits porque el índice Git de la carpeta principal está restringido por el entorno. No es un paquete, módulo ni dependencia de la aplicación; nunca debe importarse ni incluirse en Docker. Puede retirarse cuando se trabaje desde una clonación normal con permisos de Git.
+
+## Identidad y aislamiento
+
+La entrada HTTP de produccion usa profile-handler y el servicio de identidad antes del adaptador financiero. Las credenciales y sesiones se guardan en el registro SQLite de perfiles; cada UUID selecciona su repositorio financiero exclusivamente en el servidor. El primer administrador conserva la base anterior. Las reglas financieras y el formato de respaldo no cambian. Consulta PROFILES.md para rutas y alcance.

@@ -1,9 +1,13 @@
 import http from 'node:http';
 import { defaultDatabasePath } from '../infrastructure/sqlite/provision.js';
-import { openDatabase } from '../infrastructure/sqlite/ledger-repository.js';
-import { createHandler } from './http/handler.js';
-const database = openDatabase(process.env.DATABASE_PATH || defaultDatabasePath);
-const server = http.createServer(createHandler(database));
+import { openProfileRegistry } from '../infrastructure/sqlite/profile-registry.js';
+import { passwords } from '../infrastructure/security/passwords.js';
+import { tokens } from '../infrastructure/security/tokens.js';
+import { createIdentityService } from '../application/identity-service.js';
+import { createProfileHandler } from './http/profile-handler.js';
+const registry = openProfileRegistry(process.env.DATABASE_PATH || defaultDatabasePath);
+const database = createIdentityService({ registry, passwords, tokens });
+const server = http.createServer(createProfileHandler(database));
 server.requestTimeout = 30000;
 const port = Number(process.env.PORT || 3000);
 const host = process.env.HOST || '127.0.0.1';

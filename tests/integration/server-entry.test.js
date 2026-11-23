@@ -57,7 +57,19 @@ test(
       const path = join(directory, 'nested', 'finance.sqlite');
       running = await start(path);
       assert.equal((await fetch(running.url + '/health')).status, 200);
-      const state = await (await fetch(running.url + '/api/state')).json();
+      assert.equal((await fetch(running.url + '/api/state')).status, 401);
+      const setup = await fetch(running.url + '/api/auth/setup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: 'owner',
+          displayName: 'Propietario',
+          password: 'test-owner-password',
+        }),
+      });
+      assert.equal(setup.status, 200);
+      const cookie = setup.headers.get('set-cookie').split(';')[0];
+      const state = await (await fetch(running.url + '/api/state', { headers: { cookie } })).json();
       assert.equal(state.accounts.length, 1);
       assert.ok(state.categories.length > 0);
       const next = {
@@ -78,7 +90,7 @@ test(
         (
           await fetch(running.url + '/api/state', {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', cookie },
             body: JSON.stringify(next),
           })
         ).status,
@@ -86,7 +98,9 @@ test(
       );
       await stop(running.child);
       running = await start(path);
-      const restored = await (await fetch(running.url + '/api/state')).json();
+      const restored = await (
+        await fetch(running.url + '/api/state', { headers: { cookie } })
+      ).json();
       assert.equal(restored.transactions[0].amount, 100000);
     } finally {
       await stop(running?.child);

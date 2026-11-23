@@ -27,7 +27,7 @@ Permite registrar movimientos, comparar meses y seguir obligaciones sin depender
 | Informes | Evolución de seis meses y CSV del listado filtrado. |
 | Respaldos | JSON completo, compatibilidad y detección de conflictos. |
 
-**Estado: versión 0.12.1, en desarrollo.** Funciona como un único espacio personal local. Quedan pruebas visuales completas, certificación de Docker y préstamos reales con desembolso y separación de capital/intereses. El traslado entre equipos se realiza mediante un respaldo JSON completo. Consulta [MVP.md](MVP.md).
+**Estado: versión 0.13, en desarrollo.** Funciona como un único espacio personal local. Quedan pruebas visuales completas, certificación de Docker y préstamos reales con desembolso y separación de capital/intereses. El traslado de las finanzas de cada perfil se realiza mediante un respaldo JSON completo. Consulta [MVP.md](MVP.md).
 
 ## Tecnologías
 
@@ -161,7 +161,7 @@ Consulta [ARCHITECTURE.md](docs/ARCHITECTURE.md) para las reglas de dependencias
 
 ## Seguridad y límites
 
-Un único espacio financiero local, sin autenticación. La API valida hosts locales, entradas, referencias, tamaño de solicitud y revisiones. Docker usa un usuario sin privilegios y archivos de aplicación de solo lectura.
+Inicio de sesión local y perfiles con finanzas independientes. La API valida hosts locales, entradas, referencias, tamaño de solicitud y revisiones. Docker usa un usuario sin privilegios y archivos de aplicación de solo lectura.
 
 No expongas esta versión directamente a Internet. Ofrecerla a terceros requiere identidad, sesiones, aislamiento de datos y HTTPS. Bases, respaldos, `.env` y cachés están excluidos de Git.
 
@@ -206,3 +206,11 @@ En el PC de origen pulsa Exportar todos mis datos. En el PC destino abre la apli
 No necesitas red, certificados ni contrasenas. El JSON traslada una copia, no sincroniza automaticamente dos instalaciones. Exporta desde el ultimo PC utilizado cuando quieras trasladar sus cambios. Los conflictos se rechazan sin sobrescribir registros.
 
 Guia paso a paso: [Migrar mis datos](docs/MIGRATION.md).
+
+## Login y perfiles independientes
+
+Al abrir la version nueva, crea tu primer perfil: sera administrador y conservara la base financiera existente. No hay usuario ni contrasena predeterminados. Los siguientes perfiles se crean desde Mi perfil y empiezan con sus propias finanzas vacias.
+
+Puedes cambiar tu nombre, usuario y contrasena. El administrador crea perfiles y desactiva o reactiva su acceso sin borrar datos. La API comprueba la sesion antes de acceder a cada base; un administrador no recibe acceso financiero a otros perfiles. Las sesiones duran 12 horas y se cierran con Cerrar sesion; cambiar la contrasena revoca las otras sesiones.
+
+Cada respaldo JSON contiene las finanzas del perfil activo. No incluye otros perfiles, usuarios, contrasenas ni sesiones. Para usarlo en otro PC, crea tu perfil alli e importa su JSON. Consulta [la guia de perfiles](docs/PROFILES.md). La recuperacion automatica de contrasenas y la publicacion por Internet siguen pendientes.

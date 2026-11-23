@@ -130,6 +130,7 @@ export function createBackupsController({
     pendingImport = null;
   });
   $('#migrate').onclick = async () => {
+    if (document.documentElement?.dataset.profileRole !== 'admin') return;
     setProcessing(true);
     setBusy();
     try {

@@ -22,7 +22,7 @@ test('HTTP real registra un gasto, rechaza monto invalido y conserva SQLite al r
     assert.equal((await fetch(base + '/health')).status, 200);
     for (const asset of ['/', '/dashboard.js', '/loans.js', '/backup.css'])
       assert.equal((await fetch(base + asset)).status, 200);
-    const modules = ['/src/web/main.js'];
+    const modules = ['/src/web/main.js', '/src/web/auth.js'];
     const visited = new Set();
     while (modules.length) {
       const module = modules.pop();

@@ -1,0 +1,59 @@
+.auth-screen {
+  min-block-size: 100dvh;
+  margin: 0;
+  padding: 2rem 1rem;
+  display: grid;
+  place-items: center;
+  max-inline-size: none;
+}
+.auth-card {
+  inline-size: min(100%, 28rem);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.auth-card h1 {
+  font-size: clamp(1.6rem, 1.2rem + 1vw, 2rem);
+}
+.auth-card input,
+.profile-forms input {
+  inline-size: 100%;
+  margin-block-end: 0.75rem;
+}
+.auth-card label,
+.profile-forms label {
+  margin-block-end: 0.4rem;
+}
+.auth-card .primary {
+  inline-size: 100%;
+}
+.auth-card details {
+  margin-block-start: 1.25rem;
+  font-size: 0.875rem;
+}
+#auth-error {
+  color: #a02d26;
+  min-block-size: 1.5rem;
+}
+.session-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-block: 1rem;
+  font-size: 0.875rem;
+}
+.profiles-panel {
+  margin-block-start: 1.5rem;
+}
+.session-bar span { overflow-wrap: anywhere; min-inline-size: 0; flex: 1; }
+.profile-forms {
+  padding: 0 1.5rem 1.5rem;
+  display: grid;
+  gap: 1.5rem;
+}
+.profile-forms form {
+  max-inline-size: 30rem;
+}

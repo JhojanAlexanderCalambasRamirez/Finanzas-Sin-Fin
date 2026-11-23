@@ -26,7 +26,7 @@ export function createHandler(repository) {
       const content = await readFile(asset[0]);
       response.writeHead(200, {
         'Content-Type': `${asset[1]}; charset=utf-8`,
-        'Cache-Control': 'no-cache',
+        'Cache-Control': asset[1] === 'text/html' ? 'no-store' : 'no-cache',
         'X-Content-Type-Options': 'nosniff',
       });
       response.end(request.method === 'HEAD' ? undefined : content);
