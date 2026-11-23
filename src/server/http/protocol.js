@@ -9,7 +9,7 @@ export function sendJson(response, status, value) {
   response.end(JSON.stringify(value));
 }
 
-export function localRequest(request, allowedHosts = []) {
+export function localRequest(request) {
   const host = request.headers.host;
   let address;
   try {
@@ -24,8 +24,7 @@ export function localRequest(request, allowedHosts = []) {
     address.pathname !== '/' ||
     address.search ||
     address.hash ||
-    (!['localhost', '127.0.0.1', '[::1]'].includes(address.hostname) &&
-      !allowedHosts.includes(host))
+    !['localhost', '127.0.0.1', '[::1]'].includes(address.hostname)
   )
     throw new DataError('Acceso local requerido.', 403);
   if (request.headers['sec-fetch-site'] === 'cross-site')

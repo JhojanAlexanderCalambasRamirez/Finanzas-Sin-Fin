@@ -41,7 +41,9 @@ export function createBackupsController({
     setBusy();
     try {
       downloadBackup(ledgerBackup(await createLedgerStore().load()));
-      notify('Respaldo preparado con cuentas, categorías, movimientos y transferencias.');
+      notify(
+        'Archivo completo preparado: todos los meses, cuentas, movimientos, reglas, presupuestos, metas, deudas y pagos.',
+      );
     } catch {
       notify('No se pudo preparar el respaldo actualizado. Comprueba la conexión al servidor.');
     } finally {

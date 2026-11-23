@@ -160,14 +160,12 @@ Los datos del test HTTP se crean en una base temporal separada y se eliminan al 
 - [x] Pagina, 32 modulos, salud y API devuelven 200 en 3081, sin escrituras financieras de prueba.
 - [ ] Revision visual real y prueba completa en Docker.
 
-## Acceso LAN e importacion 0.12
 
-- [x] PC central con hosts explicitos, HTTPS y autenticacion HTTP compartida.
-- [x] Credenciales obligatorias y limite temporal de intentos.
-- [x] Prueba HTTPS real con certificado exclusivo de pruebas: lectura y escritura autorizadas.
-- [x] Vista previa de importacion, cancelacion sin cambios y confirmacion explicita.
-- [x] Repeticion sin duplicados, errores y respaldo previo.
-- [x] 97 pruebas aprobadas: 56 unitarias y 41 de integracion.
-- [ ] Configurar certificado confiable, direccion y contraseña reales en el PC central.
-- [ ] Validar conexion fisica entre tus PC, firewall y navegador.
-- [ ] Multiusuario aislado, sesiones de aplicacion y publicacion por Internet.
+## Migracion simple por archivo
+
+- [x] Retirar configuracion LAN, HTTPS y autenticacion compartida del alcance.
+- [x] Exportar todos los datos financieros y meses en un JSON completo.
+- [x] Cargar con vista previa, confirmacion y deteccion de duplicados y conflictos.
+- [ ] Prueba visual completa en navegador.
+
+Verificacion del flujo simplificado: 95 pruebas aprobadas (54 unitarias y 41 de integracion). Se prueba un JSON completo entre dos bases independientes, con todos los modulos, saldos y reapertura del destino.

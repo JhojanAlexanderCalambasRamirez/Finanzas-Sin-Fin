@@ -25,7 +25,7 @@
         <a class="nav" href="#reports-panel">▧ <span>Informes</span></a>
         <a class="nav" href="#loans-panel"><span>Simular préstamo</span></a>
         <a class="nav" href="#category-management"><span>Categorías</span></a>
-        <a class="nav" href="#sharing-panel"><span>Mis datos y equipos</span></a>
+        <a class="nav" href="#sharing-panel"><span>Migrar mis datos</span></a>
         <a class="nav" href="#backups"><span>Respaldos</span></a>
       </nav>
       <div class="sidebar-note">
@@ -432,39 +432,36 @@
       <section class="panel sharing-panel" id="sharing-panel">
         <div class="panel-heading">
           <div>
-            <h2>Mis datos en otros equipos</h2>
-            <p>Una sola aplicación central, la misma información desde tus PC.</p>
+            <h2>Lleva tus datos a otro PC</h2>
+            <p>Guarda un archivo completo y cárgalo cuando cambies de equipo.</p>
           </div>
         </div>
         <ol class="sharing-steps">
           <li>
-            Elige un PC que permanezca encendido y configura en él el modo de red local con HTTPS y
-            acceso protegido.
+            En este PC, pulsa <strong>Exportar todos mis datos</strong>. Conserva el archivo JSON
+            descargado.
           </li>
+          <li>Instala y abre Finanzas Sin Fin en el otro PC.</li>
           <li>
-            Abre su dirección HTTPS desde los otros equipos e inicia sesión cuando lo solicite el
-            navegador. No uses localhost en los otros PC.
-          </li>
-          <li>
-            Para trasladar tus registros actuales, exporta el JSON completo e impórtalo una sola vez
-            en el servidor central.
+            Pulsa <strong>Cargar mis datos</strong>, selecciona el JSON, revisa el resumen y
+            confirma.
           </li>
         </ol>
         <p class="budget-note">
-          Cada navegador consulta la misma base central. Recarga para ver cambios de otro equipo; si
-          editan a la vez se rechaza la revisión antigua. Los respaldos sirven para migrar y
-          recuperar, no para sincronizar instalaciones independientes.
+          Incluye cuentas, saldos iniciales, categorías, ingresos, gastos, transferencias, gastos
+          fijos y reglas, presupuestos, metas, aportes, deudas y pagos de todos los meses. No
+          necesitas configurar red ni certificados.
         </p>
         <p class="budget-note">
-          La dirección de esta instancia es la que aparece en tu navegador. El administrador
-          configura la dirección de red permitida; esta página no abre puertos ni comparte la base
-          automáticamente.
+          El archivo es una copia del momento en que lo exportaste. Después de trabajar en otro PC,
+          exporta allí una copia nueva para trasladar esos cambios. Si un registro coincide pero
+          tiene cambios distintos, la importación se detiene para evitar sobrescribir datos.
         </p>
       </section>
       <section class="backup-bar" id="backups" aria-label="Respaldo de datos">
         <p id="import-feedback" role="status"></p>
-        <button id="export" class="secondary" disabled>Exportar respaldo</button
-        ><button id="import" class="secondary" disabled>Importar respaldo</button
+        <button id="export" class="secondary" disabled>Exportar todos mis datos</button
+        ><button id="import" class="secondary" disabled>Cargar mis datos</button
         ><button id="migrate" class="secondary" hidden>Migrar registros del navegador</button
         ><input id="backup-file" type="file" accept=".json,application/json" hidden /><span
           >Copia completa de tus datos, incluidas metas, deudas y pagos.</span

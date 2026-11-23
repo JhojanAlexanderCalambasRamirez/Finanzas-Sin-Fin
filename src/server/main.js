@@ -1,24 +1,12 @@
-import https from 'node:https';
-import { readFileSync } from 'node:fs';
-import { serverConfig } from './config.js';
 import http from 'node:http';
 import { defaultDatabasePath } from '../infrastructure/sqlite/provision.js';
 import { openDatabase } from '../infrastructure/sqlite/ledger-repository.js';
 import { createHandler } from './http/handler.js';
-const config = serverConfig();
-const tlsOptions = config.tls
-  ? {
-      key: readFileSync(config.keyPath),
-      cert: readFileSync(config.certPath),
-      minVersion: 'TLSv1.2',
-    }
-  : null;
 const database = openDatabase(process.env.DATABASE_PATH || defaultDatabasePath);
-const handler = createHandler(database, config);
-const server = tlsOptions ? https.createServer(tlsOptions, handler) : http.createServer(handler);
+const server = http.createServer(createHandler(database));
 server.requestTimeout = 30000;
-const port = config.port;
-const host = config.host;
+const port = Number(process.env.PORT || 3000);
+const host = process.env.HOST || '127.0.0.1';
 server.on('error', (error) => {
   console.error(
     error.code === 'EADDRINUSE'
@@ -28,10 +16,9 @@ server.on('error', (error) => {
   database.close();
   process.exitCode = 1;
 });
-server.listen(port, host, () => {
-  const address = config.allowedHosts[0] || host + ':' + server.address().port;
-  console.log(`Finanzas-sin-fin: ${config.tls ? 'https' : 'http'}://${address}`);
-});
+server.listen(port, host, () =>
+  console.log(`Finanzas-sin-fin: http://${host}:${server.address().port}`),
+);
 let closing = false;
 for (const signal of ['SIGTERM', 'SIGINT'])
   process.on(signal, () => {

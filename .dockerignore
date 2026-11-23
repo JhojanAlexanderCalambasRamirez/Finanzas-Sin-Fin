@@ -5,6 +5,5 @@
 !scripts/
 !scripts/check.mjs
 !scripts/init-db.mjs
-!scripts/start-lan.mjs
 !tests/
 !tests/**
