@@ -17,7 +17,7 @@ MVP publicado: varias personas acceden por Internet con identidad, sesiones prot
 - [x] Dashboard con comparacion mensual y alertas accionables.
 - [x] Validacion de entradas y control de revision contra sobrescrituras.
 - [x] SQLite, migraciones y respaldos JSON portables.
-- [x] 45 pruebas unitarias y 37 funcionales, incluida una prueba HTTP real.
+- [x] 49 pruebas unitarias y 39 funcionales, incluida una prueba HTTP real.
 
 ## Cuatro bloques para cerrar el MVP local
 
@@ -64,3 +64,16 @@ No se asigna un porcentaje de avance: el codigo implementado y la validacion de 
 - [x] Repetir no duplica ni modifica gastos.
 - [x] Pruebas de entradas invalidas, colisiones, SQLite y respaldo.
 - [ ] Validacion del nuevo dialogo en navegador.
+
+## Reestructuracion 0.10
+
+- [x] Dominio independiente de DOM, HTTP y SQLite.
+- [x] Servicio de aplicacion y adaptador SQLite separados.
+- [x] Migraciones separadas del repositorio y base conservada en data/.
+- [x] Frontend dividido en 11 funcionalidades y sesion sin DOM.
+- [x] Pruebas y utilidades separadas en tests/unit, integration y helpers.
+- [x] Restricciones de dependencias verificadas automaticamente.
+- [x] Arranque del servidor real desde cero y reinicio con persistencia.
+- [x] Grafo HTTP de modulos y rechazo de rutas privadas.
+- [x] Bootstrap web con DOM simulado, apertura de formularios, registro y simulacion.
+- [ ] Validacion visual completa y construccion Docker en un entorno con acceso al motor.

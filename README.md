@@ -27,7 +27,7 @@ Permite registrar movimientos, comparar meses y seguir obligaciones sin depender
 | Informes | Evolución de seis meses y CSV del listado filtrado. |
 | Respaldos | JSON completo, compatibilidad y detección de conflictos. |
 
-**Estado: versión 0.9, en desarrollo.** Funciona como un único espacio personal local. Quedan pruebas visuales completas, certificación de Docker y préstamos reales con desembolso y separación de capital/intereses. Autenticación y multiusuario están pendientes. Consulta [MVP.md](MVP.md).
+**Estado: versión 0.10, en desarrollo.** Funciona como un único espacio personal local. Quedan pruebas visuales completas, certificación de Docker y préstamos reales con desembolso y separación de capital/intereses. Autenticación y multiusuario están pendientes. Consulta [MVP.md](MVP.md).
 
 ## Tecnologías
 
@@ -136,7 +136,7 @@ npm run test:functional
 npm test
 ```
 
-`check` revisa sintaxis JavaScript, UTF-8 e identificadores HTML duplicados. Las pruebas cubren cálculos, entradas inválidas, migraciones, restauración, concurrencia y persistencia. Una prueba levanta HTTP real en loopback; otra comprueba el aprovisionamiento desde cero y su repetición sin alterar datos.
+`check` recorre src, tests y scripts: revisa sintaxis, UTF-8, imports e identificadores HTML duplicados. Las pruebas cubren cálculos, entradas inválidas, migraciones, restauración, concurrencia y persistencia. Una prueba levanta HTTP real en loopback; otra comprueba el aprovisionamiento desde cero y su repetición sin alterar datos.
 
 Los resultados y comprobaciones pendientes están en [QA.md](QA.md). El workflow preparado no garantiza por sí solo que CI haya pasado: consulta Actions.
 
@@ -144,15 +144,20 @@ Los resultados y comprobaciones pendientes están en [QA.md](QA.md). El workflow
 
 La interfaz llama a una API local. El servidor valida y guarda el estado completo en una transacción SQLite. Una revisión evita sobrescribir cambios de otra sesión: un estado desactualizado produce conflicto.
 
-| Archivos | Responsabilidad |
+| Carpeta | Responsabilidad |
 | --- | --- |
-| `index.html`, `styles.css`, `backup.css`, `app.js` | Interfaz, navegación y formularios. |
-| `server.js`, `http-handler.js` | Arranque, archivos públicos, API y salud. |
-| `database.js`, `provision.js`, `scripts/init-db.mjs` | Datos, migraciones y aprovisionamiento. |
-| `ledger.js`, `validation.js`, `finance.js` | Estado, validación y cálculos base. |
-| `budgets.js`, `recurrences.js`, `goals.js`, `debts.js` | Reglas de negocio. |
-| `dashboard.js`, `reports.js`, `loans.js` | Indicadores, exportación y simulación. |
-| `*.test.js`, `.github/workflows/ci.yml` | Pruebas y validación continua. |
+| `src/domain/` | Reglas y cálculos financieros, sin DOM, HTTP ni SQLite. |
+| `src/application/` | Servicio financiero y contrato con el repositorio. |
+| `src/infrastructure/sqlite/` | Persistencia transaccional, migraciones y aprovisionamiento. |
+| `src/server/` | Composición del backend, rutas y protocolo HTTP. |
+| `src/web/features/` | Controladores independientes por funcionalidad. |
+| `src/web/application/` | Sesión y coordinación de guardado del navegador. |
+| `src/web/data/` | Adaptadores HTTP y migración del almacenamiento anterior. |
+| `src/web/shared/`, `src/web/styles/` | Utilidades de interfaz, interacciones y estilos. |
+| `tests/unit/`, `tests/integration/`, `tests/helpers/` | Pruebas separadas del código de producción. |
+| `scripts/`, `docs/`, `.github/` | Operación, documentación y CI. |
+
+Consulta [ARCHITECTURE.md](docs/ARCHITECTURE.md) para las reglas de dependencias y la guía de extensión. El punto de entrada es `src/server/main.js`; los comandos de instalación y arranque se conservan.
 
 ## Seguridad y límites
 
@@ -181,3 +186,5 @@ Desarrollo con asistencia de Codex. Node.js, SQLite y Docker pertenecen a sus re
 ## Copiar presupuestos entre meses
 
 En Presupuestos, selecciona el periodo destino y pulsa Copiar mes anterior. La vista previa muestra categorias e importes y requiere confirmacion. Solo copia limites de categorias activas que aun no tienen presupuesto en el destino. No copia gastos ni modifica limites existentes; repetir la operacion no duplica registros.
+
+Verificacion de esta entrega: [docs/VALIDATION.md](docs/VALIDATION.md).

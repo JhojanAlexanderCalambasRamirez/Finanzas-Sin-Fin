@@ -1,8 +1,8 @@
-# Revision de calidad: version 0.9
+# Revision de calidad: version 0.10
 
 ## Resultados automaticos
 
-Evaluacion realizada el 23 de noviembre de 2026. La suite previa de 53 pruebas paso antes de modificar el codigo. Resultado final con Node.js 24: **45 pruebas unitarias y 37 funcionales aprobadas, cero fallos y cero omitidas**. La configuracion Compose y la sintaxis JavaScript se validaron. La suite utiliza archivos SQLite reales. Las pruebas de API usan transporte simulado y, adicionalmente, network.test.js levanta un servidor HTTP real en un puerto efimero sobre loopback. Esto no sustituye la prueba de navegador o Docker.
+Evaluacion realizada el 23 de noviembre de 2026. La suite previa de 53 pruebas paso antes de modificar el codigo. Resultado final con Node.js 24: **49 pruebas unitarias y 39 funcionales aprobadas, cero fallos y cero omitidas**. La configuracion Compose y la sintaxis JavaScript se validaron. La suite utiliza archivos SQLite reales. Las pruebas de API usan transporte simulado y, adicionalmente, network.test.js levanta un servidor HTTP real en un puerto efimero sobre loopback. Esto no sustituye la prueba de navegador o Docker.
 
 ## Checklist funcional actual
 
@@ -126,7 +126,7 @@ Los datos del test HTTP se crean en una base temporal separada y se eliminan al 
 - [x] Repetir aprovisionamiento conserva datos y revision.
 - [x] Comando db:init probado como proceso real.
 - [x] Orden DOM: resumen, movimientos, cuentas; categorias y respaldos accesibles desde menu.
-- [x] 82 pruebas totales aprobadas antes de publicar.
+- [x] 88 pruebas totales aprobadas antes de publicar.
 - [ ] Validacion visual y contenedor Docker completos.
 
 ## Copia mensual de limites
@@ -136,3 +136,16 @@ Los datos del test HTTP se crean en una base temporal separada y se eliminan al 
 - [x] Repetir no duplica ni modifica gastos.
 - [x] Pruebas de entradas invalidas, colisiones, SQLite y respaldo.
 - [ ] Validacion del nuevo dialogo en navegador.
+
+## Reestructuracion 0.10
+
+- [x] Dominio independiente de DOM, HTTP y SQLite.
+- [x] Servicio de aplicacion y adaptador SQLite separados.
+- [x] Migraciones separadas del repositorio y base conservada en data/.
+- [x] Frontend dividido en 11 funcionalidades y sesion sin DOM.
+- [x] Pruebas y utilidades separadas en tests/unit, integration y helpers.
+- [x] Restricciones de dependencias verificadas automaticamente.
+- [x] Arranque del servidor real desde cero y reinicio con persistencia.
+- [x] Grafo HTTP de modulos y rechazo de rutas privadas.
+- [x] Bootstrap web con DOM simulado, apertura de formularios, registro y simulacion.
+- [ ] Validacion visual completa y construccion Docker en un entorno con acceso al motor.
