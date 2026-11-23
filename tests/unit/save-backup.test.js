@@ -3,6 +3,38 @@ import assert from 'node:assert/strict';
 import { saveJsonBackup } from '../../src/web/shared/save-backup.js';
 import { createDomDouble } from '../helpers/dom.js';
 
+test('escritorio muestra la ruta real devuelta por el guardado nativo y respeta cancelar', async () => {
+  let message;
+  const browser = {
+    finanzasDesktop: {
+      saveBackup: async (filename, content) => {
+        assert.equal(filename, 'finanzas-sin-fin.json');
+        assert.deepEqual(JSON.parse(content), { amount: 4 });
+        return { path: 'C:\\Copias\\finanzas-sin-fin.json' };
+      },
+    },
+  };
+  await saveJsonBackup(
+    'finanzas-sin-fin.json',
+    async () => ({ amount: 4 }),
+    (value) => {
+      message = value;
+    },
+    browser,
+  );
+  assert.match(message, /C:\\Copias\\finanzas-sin-fin.json/);
+  browser.finanzasDesktop.saveBackup = async () => ({ canceled: true });
+  await assert.rejects(
+    saveJsonBackup(
+      'finanzas-sin-fin.json',
+      async () => ({}),
+      () => assert.fail(),
+      browser,
+    ),
+    { name: 'AbortError' },
+  );
+});
+
 test('respaldo elige ubicación antes de consultar y confirma solo después de cerrar el archivo', async () => {
   const steps = [];
   const browser = {

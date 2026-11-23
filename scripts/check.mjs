@@ -8,7 +8,7 @@ function walk(directory) {
     entry.isDirectory() ? walk(join(directory, entry.name)) : [join(directory, entry.name)],
   );
 }
-const files = ['src', 'tests', 'scripts'].flatMap(walk).filter((file) => /\.(js|mjs)$/.test(file));
+const files = ['src', 'tests', 'scripts'].flatMap(walk).filter((file) => /\.(js|mjs|cjs)$/.test(file));
 for (const file of files) {
   const bytes = readFileSync(file);
   if (!isUtf8(bytes)) throw new Error(`${file}: codificacion UTF-8 no valida`);

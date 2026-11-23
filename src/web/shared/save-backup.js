@@ -1,4 +1,14 @@
 export async function saveJsonBackup(filename, load, feedback, browser = window) {
+  if (browser.finanzasDesktop) {
+    const result = await browser.finanzasDesktop.saveBackup(
+      filename,
+      JSON.stringify(await load(), null, 2),
+    );
+    if (result.canceled)
+      throw Object.assign(new Error('Guardado cancelado.'), { name: 'AbortError' });
+    feedback(`Copia guardada en: ${result.path}`);
+    return;
+  }
   // Request the location during the click, before awaiting a network request.
   const handle =
     typeof browser.showSaveFilePicker === 'function'

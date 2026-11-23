@@ -1,6 +1,6 @@
 {
   "name": "finanzas-sin-fin",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,9 +9,52 @@
     "test:unit": "node --test tests/unit/*.test.js",
     "check": "node scripts/check.mjs",
     "test:functional": "node --test tests/integration/*.test.js",
-    "db:init": "node scripts/init-db.mjs"
+    "db:init": "node scripts/init-db.mjs",
+    "desktop": "electron .",
+    "desktop:smoke": "electron . --smoke-test",
+    "dist:win": "npm run check && npm test && electron-builder --win nsis --x64 --publish never",
+    "dist:mac": "npm run check && npm test && electron-builder --mac dmg --x64 --arm64 --publish never"
   },
   "engines": {
     "node": ">=24"
+  },
+  "devDependencies": {
+    "electron": "45.4.1",
+    "electron-builder": "26.18.0"
+  },
+  "main": "src/desktop/main.js",
+  "description": "Finanzas personales locales con perfiles independientes y respaldos portables",
+  "author": "Jhojan Alexander Calambas Ramirez",
+  "build": {
+    "appId": "com.jhojanalexander.finanzassinfin",
+    "productName": "Finanzas Sin Fin",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false,
+      "createDesktopShortcut": true,
+      "artifactName": "Finanzas-Sin-Fin-${version}-Windows-${arch}-Setup.${ext}"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.finance",
+      "artifactName": "Finanzas-Sin-Fin-${version}-macOS-${arch}.${ext}"
+    }
   }
 }

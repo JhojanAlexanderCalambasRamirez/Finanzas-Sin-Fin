@@ -23,3 +23,6 @@ mwg-guide-*.md
 
 /lan.env
 /certs/
+
+/dist/
+/.build-cache/

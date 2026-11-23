@@ -25,10 +25,25 @@ export function createBackupsController({
   isProcessing,
 }) {
   let pendingImport = null;
+  if (window.finanzasDesktop) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'secondary';
+    button.textContent = 'Mostrar última copia en carpeta';
+    button.onclick = () =>
+      window.finanzasDesktop.revealBackup().catch(() => notify('No se pudo abrir la carpeta.'));
+    $('#backups').append(button);
+  }
   const locationFeedback = (message) => {
     $('#backup-location').textContent = message;
   };
   function downloadBackup(backup, suffix = '') {
+    if (window.finanzasDesktop)
+      return saveJsonBackup(
+        `finanzas-sin-fin${suffix}-${today()}.json`,
+        async () => backup,
+        locationFeedback,
+      );
     const url = URL.createObjectURL(
       new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }),
     );
@@ -125,7 +140,7 @@ export function createBackupsController({
     setProcessing(true);
     try {
       const plan = prepareImport(getState(), pendingImport.text);
-      downloadBackup(ledgerBackup(getState()), '-antes-de-importar');
+      await downloadBackup(ledgerBackup(getState()), '-antes-de-importar');
       if (await persist(plan.next)) {
         $('#import-preview-dialog').close();
         if (plan.lastDate) $('#month').value = plan.lastDate.slice(0, 7);
@@ -166,7 +181,7 @@ export function createBackupsController({
         )
       )
         return;
-      downloadBackup(
+      await downloadBackup(
         {
           app: 'finanzas-sin-fin',
           version: 1,

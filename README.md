@@ -214,3 +214,7 @@ Al abrir la version nueva, crea tu primer perfil: sera administrador y conservar
 Puedes cambiar tu nombre, usuario y contrasena. El administrador crea perfiles y desactiva o reactiva su acceso sin borrar datos. La API comprueba la sesion antes de acceder a cada base; un administrador no recibe acceso financiero a otros perfiles. Las sesiones duran 12 horas y se cierran con Cerrar sesion; cambiar la contrasena revoca las otras sesiones.
 
 Cada respaldo JSON contiene las finanzas del perfil activo. No incluye otros perfiles, usuarios, contrasenas ni sesiones. Para usarlo en otro PC, crea tu perfil alli e importa su JSON. Consulta [la guia de perfiles](docs/PROFILES.md). La recuperacion automatica de contrasenas y la publicacion por Internet siguen pendientes.
+
+## Aplicacion de escritorio
+
+La version de escritorio reutiliza las finanzas y perfiles existentes, incluye su propio motor Node/SQLite y guarda datos fuera del programa. No requiere Docker ni Node en el equipo del usuario. Consulta docs/DESKTOP.md para uso, importacion desde la version web y generacion de instaladores Windows/macOS.

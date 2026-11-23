@@ -188,3 +188,13 @@ Validacion 0.13: 101 pruebas aprobadas (56 unitarias y 45 de integracion); 86 ar
 - [x] Confirmar guardado solo despues de cerrar el archivo; cancelacion y fallo de disco sin falso exito.
 - [x] Alternativa de descarga con instrucciones Ctrl+J y Mostrar en carpeta.
 - [x] Pruebas automatizadas de selector, cancelacion, fallo de escritura y descarga alternativa.
+
+## Escritorio 0.14
+
+- [x] Runtime loopback con puerto automatico y base independiente.
+- [x] Puente nativo limitado a guardar JSON y mostrar la ultima copia.
+- [x] Ventana aislada, sin Node en el renderer ni navegacion externa.
+- [x] Configuracion NSIS Windows, DMG Intel/Apple Silicon y GitHub Actions manual.
+- [x] 106 pruebas aprobadas, incluido runtime y ruta nativa/cancelacion del respaldo.
+- [ ] Prueba visual e instalacion real: el entorno restringido cierra Electron y no permite ejecutar makensis (spawn UNKNOWN).
+- [ ] Firma de Windows, notarizacion Apple y validacion real en macOS.
