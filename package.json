@@ -1,0 +1,17 @@
+{
+  "name": "finanzas-sin-fin",
+  "version": "0.9.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test finance.test.js ledger.test.js movement-tools.test.js validation.test.js api-store.test.js transaction-store.test.js goals.test.js debts.test.js reports.test.js loans.test.js dashboard.test.js database.test.js http-handler.test.js budgets.test.js recurrences.test.js functional.test.js network.test.js provision.test.js",
+    "test:unit": "node --test finance.test.js ledger.test.js movement-tools.test.js validation.test.js api-store.test.js transaction-store.test.js goals.test.js debts.test.js reports.test.js loans.test.js dashboard.test.js",
+    "check": "node scripts/check.mjs",
+    "test:functional": "node --test database.test.js http-handler.test.js budgets.test.js recurrences.test.js functional.test.js network.test.js provision.test.js",
+    "db:init": "node scripts/init-db.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

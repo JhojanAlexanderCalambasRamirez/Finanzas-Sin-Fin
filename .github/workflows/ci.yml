@@ -1,0 +1,52 @@
+name: Validacion
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Node 24 - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: npm run check
+      - run: npm run test:unit
+      - run: npm run test:functional
+
+  docker:
+    name: Docker y salud HTTP
+    needs: tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      APP_PORT: '3080'
+      BIND_ADDRESS: '127.0.0.1'
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - run: docker compose config --quiet
+      - run: docker compose -p finanzas-ci up -d --build --wait
+      - run: curl --fail --silent --show-error http://127.0.0.1:3080/health
+      - name: Logs si falla
+        if: failure()
+        run: docker compose -p finanzas-ci logs --no-color
+      - name: Limpiar solo el entorno de CI
+        if: always()
+        run: docker compose -p finanzas-ci down --volumes

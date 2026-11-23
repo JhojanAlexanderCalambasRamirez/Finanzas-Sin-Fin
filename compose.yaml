@@ -1,0 +1,22 @@
+name: finanzas-sin-fin
+services:
+  web:
+    build:
+      context: .
+      target: runtime
+    image: finanzas-sin-fin:local
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${APP_PORT:-3080}:3000"
+    restart: unless-stopped
+    init: true
+    read_only: true
+    environment:
+      DATABASE_PATH: /app/data/finanzas.sqlite
+    volumes:
+      - finance-data:/app/data
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  finance-data:

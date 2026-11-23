@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Finanzas sin fin · Tu dinero, más claro</title>
+  <link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/backup.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-heading">Saltar al contenido</a>
+  <aside class="sidebar">
+    <a class="brand" href="/">f<span>↗</span><strong>finanzas<br><small>sin fin</small></strong></a>
+    <div class="workspace">MI ESPACIO PERSONAL</div>
+    <nav aria-label="Secciones financieras">
+    <a class="nav active" href="#overview">◫ <span>Resumen</span></a>
+    <a class="nav" href="#accounts">▣ <span>Cuentas</span></a>
+    <a class="nav" href="#movements">⇄ <span>Movimientos</span></a>
+    <a class="nav" href="#budgets-panel">▤ <span>Presupuestos</span></a>
+    <a class="nav" href="#recurring-panel">↻ <span>Recurrentes</span></a>
+    <a class="nav" href="#goals-panel">◎ <span>Metas</span></a>
+    <a class="nav" href="#debts-panel">▥ <span>Deudas</span></a>
+    <a class="nav" href="#reports-panel">▧ <span>Informes</span></a>
+    <a class="nav" href="#loans-panel"><span>Simular préstamo</span></a>
+    <a class="nav" href="#category-management"><span>Categorías</span></a>
+    <a class="nav" href="#backups"><span>Respaldos</span></a>
+    </nav>
+    <div class="sidebar-note"><span>UN PASO A LA VEZ</span><p>Las pequeñas decisiones construyen grandes cambios.</p><div class="note-line"></div></div>
+    <div class="profile"><div class="avatar">TÚ</div><div>Mis finanzas<small>Espacio personal</small></div></div>
+  </aside>
+  <main id="overview">
+    <header><div class="breadcrumb">Mi espacio <span>/</span> Resumen</div><div class="private">Conectando con tus registros...</div></header>
+    <div class="feedback-bar"><p id="notice" role="status" aria-atomic="true"></p><button id="reload-data" class="secondary" type="button" hidden>Recargar datos</button></div>
+    <section class="heading"><div><div class="eyebrow">TU DINERO, MÁS CLARO</div><h1 id="main-heading" tabindex="-1">Todo empieza con un buen balance<span>.</span></h1><p>Un vistazo a tus finanzas. Un paso hacia tus metas.</p></div><button id="add" class="primary" disabled>＋ Nuevo movimiento</button></section>
+    <details class="usage-help"><summary>¿Cómo empiezo y qué significa el balance?</summary><ol><li>En Cuentas, ajusta el dinero que tenías al empezar.</li><li>Registra ingresos y gastos desde Nuevo movimiento.</li><li>El balance compara ingresos y gastos del mes; el saldo de cuentas incluye tu dinero inicial.</li><li>Define límites y metas cuando ya tengas movimientos. Exporta un respaldo para conservar una copia.</li></ol></details>
+    <div class="period-bar"><h2>Resumen del mes</h2><label class="month-label">Periodo <input type="month" id="month" min="0001-01" max="9999-12" aria-label="Periodo del resumen"></label></div>
+    <section class="cards" aria-label="Resumen financiero">
+      <article class="card balance"><div class="card-label">Balance del mes <span>↗</span></div><strong id="balance">$ 0</strong><p>Ingresos menos gastos; excluye transferencias</p><div class="balance-art"></div></article>
+      <article class="card"><div class="card-label">Ingresos <span class="income-icon">↙</span></div><strong id="income">$ 0</strong><p>Todo lo que sumaste este mes</p></article>
+      <article class="card"><div class="card-label">Gastos <span class="expense-icon">↗</span></div><strong id="expense">$ 0</strong><p>Todo lo que usaste este mes</p></article>
+    </section>
+    <section class="dashboard-priorities">
+      <div class="insight-grid">
+        <article class="insight"><h2>Balance / ingresos</h2><strong id="saving-rate">—</strong><p>Proporción del balance mensual. No representa ahorro reservado.</p></article>
+        <article class="insight"><h2>Gastos frente al mes anterior</h2><strong id="expense-change">—</strong><p id="comparison-period"></p></article>
+        <article class="insight"><h2>Deuda pendiente</h2><strong id="pending-debt">—</strong><p id="overdue-total">Al cierre del periodo, sin deudas archivadas.</p></article>
+      </div>
+      <div class="panel priorities-panel"><div class="panel-heading"><div><h2>Para revisar</h2><p>Alertas del periodo seleccionado, independientes de los filtros del listado.</p></div></div><ul id="dashboard-alerts"></ul><p id="dashboard-empty" class="budget-note"></p></div>
+    </section>
+    <section class="content-grid">
+      <article class="panel" id="movements">
+        <div class="panel-heading"><div><h2>Tus movimientos</h2><p>El detalle de cada paso.</p></div><select id="filter" aria-label="Filtrar movimientos"><option value="all">Todos</option><option value="income">Ingresos</option><option value="expense">Gastos</option><option value="transfer">Transferencias</option></select></div>
+        <div class="movement-filters">
+          <label>Buscar<input id="search" type="search" maxlength="120" placeholder="Descripción, cuenta o categoría"></label>
+          <label>Cuenta<select id="account-filter"><option value="">Todas las cuentas</option></select></label>
+          <label>Categoría<select id="category-filter"><option value="">Todas las categorías</option></select></label>
+          <button id="clear-filters" class="secondary">Limpiar filtros</button>
+          <button id="export-csv" class="secondary" disabled>Exportar listado (CSV)</button>
+          <p>Los filtros aplican al listado. El resumen y los saldos mantienen los totales del periodo.</p>
+        </div>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Tabla de movimientos, desplazamiento horizontal"><table><thead><tr><th scope="col">Descripción y cuenta</th><th scope="col">Fecha</th><th scope="col" class="amount">Monto</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead><tbody id="rows"></tbody></table></div>
+        <div class="pagination"><button id="previous-page" class="secondary">Anterior</button><span id="page-info" role="status"></span><button id="next-page" class="secondary">Siguiente</button></div>
+        <div id="empty" class="empty"><div class="empty-icon">⇄</div><h3>No hay movimientos en esta selección</h3><p>Registra un movimiento o consulta otro periodo.</p><button class="secondary" id="first" disabled>＋ Registrar movimiento</button></div><div class="table-footer" id="count"></div>
+      </article>
+      <aside class="panel spending"><div class="panel-heading"><div><h2>¿A dónde va tu dinero?</h2><p>Gastos por categoría</p></div></div><div id="categories"></div><div class="tip"><span>✦ UNA BUENA COSTUMBRE</span><p>Registrar tus gastos es el primer paso para decidir mejor.</p></div></aside>
+    </section>
+    <section class="panel accounts-panel" id="accounts">
+      <div class="panel-heading"><div><h2>Mis cuentas</h2><p id="accounts-period">Saldos acumulados al cierre del mes</p></div><button id="new-account" class="secondary" disabled>＋ Nueva cuenta</button></div>
+      <div class="accounts-total">Saldo total <strong id="total-balance">$ 0</strong></div><div id="account-cards" class="account-cards"></div>
+    </section>
+    <section class="panel budgets-panel" id="budgets-panel">
+      <div class="panel-heading"><div><h2>Presupuestos del mes</h2><p>Compara tus límites con los gastos de todas tus cuentas.</p></div><button id="new-budget" class="secondary" disabled>＋ Nuevo límite</button></div>
+      <p id="budget-summary" class="budget-summary" role="status"></p><div id="budget-cards" class="account-cards"></div>
+      <p class="budget-note">Los ingresos, transferencias y saldos iniciales no consumen presupuesto. Los gastos sin límite asignado se muestran por separado.</p>
+    </section>
+    <section class="panel recurring-panel" id="recurring-panel">
+      <div class="panel-heading"><div><h2>Movimientos recurrentes</h2><p>Ingresos y gastos semanales o mensuales. Revisa los pendientes antes de registrarlos.</p></div><button id="new-rule" class="secondary" disabled>＋ Nueva regla</button></div>
+      <ul id="rule-list" class="category-list"></ul>
+      <div class="recurrence-controls"><label>Generar hasta<input id="recurrence-through" type="date" min="0001-01-01" max="9999-12-31" required></label><button id="preview-rules" class="secondary" disabled>Revisar pendientes</button></div>
+    </section>
+    <section class="panel goals-panel" id="goals-panel">
+      <div class="panel-heading"><div><h2>Metas de ahorro</h2><p id="goals-period">Avance de tus aportes al cierre del mes.</p></div><button id="new-goal" class="secondary" disabled>＋ Nueva meta</button></div>
+      <p class="budget-note">Los aportes son registros de seguimiento: no mueven dinero, no reservan saldo y no crean ingresos ni gastos. Registra por separado cualquier movimiento real entre cuentas.</p>
+      <div id="goal-cards" class="account-cards"></div>
+    </section>
+    <section class="panel debts-panel" id="debts-panel">
+      <div class="panel-heading"><div><h2>Deudas y cuotas</h2><p id="debts-period">Saldos y vencimientos al cierre del mes.</p></div><button id="new-debt" class="secondary" disabled>＋ Nueva deuda</button></div>
+      <p class="budget-note">Registra el total acordado. Las cuotas distribuyen ese importe; no se calculan intereses. Cada pago se asocia a un gasto y se cuenta una sola vez en tus cuentas.</p><div id="debt-cards" class="account-cards"></div>
+    </section>
+    <section class="panel reports-panel" id="reports-panel">
+      <div class="panel-heading"><div><h2>Evolución mensual</h2><p>Últimos seis meses hasta el periodo seleccionado. Las transferencias no alteran ingresos ni gastos.</p></div></div>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Informe mensual, desplazamiento horizontal"><table><thead><tr><th scope="col">Mes</th><th scope="col" class="amount">Ingresos</th><th scope="col" class="amount">Gastos</th><th scope="col" class="amount">Balance</th></tr></thead><tbody id="report-rows"></tbody></table></div>
+      <p class="budget-note">El CSV se descarga desde el listado de movimientos y respeta sus filtros. No sustituye el respaldo JSON completo.</p>
+    </section>
+    <section class="panel loans-panel" id="loans-panel" aria-labelledby="loan-title">
+      <div class="panel-heading"><div><h2 id="loan-title">Antes de pedir un préstamo</h2><p>Compara la cuota y el costo estimado de financiarte.</p></div></div>
+      <form id="loan-form" class="loan-form">
+        <div class="loan-fields">
+          <label>Capital (COP)<input name="principal" type="text" inputmode="numeric" required value="5.000.000" maxlength="24"></label>
+          <label>Tasa efectiva anual (%)<input name="annualRate" type="number" min="0" max="100" step="0.01" required value="24"></label>
+          <label>Plazo en meses<input name="months" type="number" min="1" max="360" step="1" required value="24"></label>
+        </div>
+        <button class="primary" type="submit">Calcular préstamo</button><p id="loan-error" role="alert"></p>
+        <p class="field-help">Estimación con cuota fija y redondeo a pesos. No incluye seguros, comisiones ni cambios de tasa. No guarda una deuda ni mueve dinero.</p>
+      </form>
+      <div id="loan-result" hidden><p id="loan-summary" class="budget-summary" role="status"></p>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Tabla de amortización del préstamo"><table><caption class="sr-only">Cuotas estimadas del préstamo</caption><thead><tr><th scope="col">Cuota</th><th scope="col">Pago</th><th scope="col">Interés</th><th scope="col">Capital</th><th scope="col">Pendiente</th></tr></thead><tbody id="loan-rows"></tbody></table></div>
+      </div>
+    </section>
+    <section class="panel category-panel" id="category-management">
+      <div class="panel-heading"><div><h2>Mis categorías</h2><p>Archiva las que no uses. Su historial se conserva.</p></div><button id="new-category" class="secondary" disabled>＋ Nueva categoría</button></div>
+      <ul id="category-list" class="category-list"></ul>
+    </section>
+    <section class="backup-bar" id="backups" aria-label="Respaldo de datos"><button id="export" class="secondary" disabled>Exportar respaldo</button><button id="import" class="secondary" disabled>Importar respaldo</button><button id="migrate" class="secondary" hidden>Migrar registros del navegador</button><input id="backup-file" type="file" accept=".json,application/json" hidden><span>Copia completa de tus datos, incluidas metas, deudas y pagos.</span></section>
+
+    <footer>Hecho para avanzar a tu ritmo.<span>Finanzas sin fin · Valores en COP</span></footer>
+  </main>
+  <dialog id="dialog" aria-labelledby="movement-title"><form id="form">
+    <div class="dialog-heading"><h2 id="movement-title">Nuevo movimiento</h2><button type="button" data-close="dialog" class="close" aria-label="Cerrar">×</button></div>
+    <p class="form-intro">Dale un lugar a cada peso.</p>
+    <label>Tipo<select name="type"><option value="expense">Gasto</option><option value="income">Ingreso</option><option value="transfer">Transferencia</option></select></label>
+    <label>Descripción<input name="description" required maxlength="120" placeholder="Ej. Mercado de la semana"></label>
+    <div class="form-grid"><label>Monto (COP)<input name="amount" type="text" inputmode="numeric" maxlength="24" required placeholder="50.000" aria-describedby="money-help"></label><label>Fecha<input name="date" type="date" min="0001-01-01" max="9999-12-31" required></label></div>
+    <p id="money-help" class="field-help">Pesos enteros: 50000 o 50.000. Sin decimales.</p>
+    <label><span id="source-label">Cuenta</span><select name="accountId" required></select></label>
+    <label id="destination-label" hidden>Cuenta de destino<select name="toAccountId"></select></label>
+    <label id="category-label">Categoría<select name="category" id="category" required></select></label>
+    <p id="transfer-help" class="form-intro" hidden>Una transferencia mueve saldo entre tus cuentas. No cuenta como ingreso ni gasto.</p>
+    <p id="error" role="alert"></p><button class="primary save" type="submit">Guardar movimiento</button>
+  </form></dialog>
+  <dialog id="account-dialog" aria-labelledby="account-title"><form id="account-form">
+    <div class="dialog-heading"><h2 id="account-title">Nueva cuenta</h2><button type="button" data-close="account-dialog" class="close" aria-label="Cerrar cuenta">×</button></div>
+    <p class="form-intro">El saldo inicial es el dinero que tenías al comenzar a registrar esta cuenta.</p>
+    <label>Nombre<input name="name" required maxlength="60" placeholder="Ej. Mi cuenta de ahorros"></label>
+    <label>Tipo<select name="type"><option value="cash">Efectivo</option><option value="bank">Banco</option><option value="wallet">Billetera</option></select></label>
+    <label>Saldo inicial (COP)<input name="initialBalance" type="text" inputmode="text" maxlength="24" required value="0" aria-describedby="initial-help"></label>
+    <p id="initial-help" class="field-help">Pesos enteros. Admite puntos de miles y signo negativo.</p>
+    <label>Fecha del saldo inicial<input name="initialDate" type="date" min="0001-01-01" max="9999-12-31" required></label>
+    <p class="form-intro">El saldo inicial aplica al inicio de esa fecha. Los movimientos de ese día se suman después. Se permiten saldos negativos.</p>
+    <p id="account-error" role="alert"></p><button class="primary save" type="submit">Guardar cuenta</button>
+  </form></dialog>
+  <dialog id="category-dialog" aria-labelledby="category-title"><form id="category-form">
+    <div class="dialog-heading"><h2 id="category-title">Nueva categoría</h2><button type="button" data-close="category-dialog" class="close" aria-label="Cerrar categoría">×</button></div>
+    <p class="form-intro">Al renombrar una categoría también se actualiza su nombre en los movimientos anteriores.</p>
+    <label>Nombre<input name="name" required maxlength="60" placeholder="Ej. Mascotas"></label>
+    <p id="category-error" role="alert"></p><button class="primary save" type="submit">Guardar categoría</button>
+  </form></dialog>
+  <dialog id="rule-dialog" aria-labelledby="rule-title"><form id="rule-form">
+    <div class="dialog-heading"><h2 id="rule-title">Nueva regla recurrente</h2><button type="button" data-close="rule-dialog" class="close" aria-label="Cerrar regla">×</button></div>
+    <p class="form-intro">Guardar una regla no crea movimientos. Se registran al revisar y confirmar pendientes. Los cambios no modifican movimientos ya generados.</p>
+    <label>Tipo<select name="type"><option value="expense">Gasto</option><option value="income">Ingreso</option></select></label>
+    <label>Descripción<input name="description" required maxlength="120" placeholder="Ej. Arriendo mensual"></label>
+    <label>Monto (COP)<input name="amount" required type="text" inputmode="numeric" maxlength="24" placeholder="500.000"></label>
+    <label>Cuenta<select name="accountId" required></select></label>
+    <label>Categoría<select name="category" required></select></label>
+    <label>Frecuencia<select name="frequency"><option value="monthly">Mensual</option><option value="weekly">Semanal</option></select></label>
+    <div class="form-grid"><label>Inicio<input name="startDate" type="date" required min="0001-01-01" max="9999-12-31"></label><label>Fin opcional<input name="endDate" type="date" min="0001-01-01" max="9999-12-31"></label></div>
+    <p class="field-help">Los días 29, 30 y 31 se ajustan al último día de los meses más cortos.</p>
+    <p id="rule-error" role="alert"></p><button class="primary save" type="submit">Guardar regla</button>
+  </form></dialog>
+  <dialog id="preview-dialog" aria-labelledby="preview-title">
+    <div class="dialog-heading"><h2 id="preview-title">Revisar pendientes</h2><button type="button" data-close="preview-dialog" class="close" aria-label="Cerrar vista previa">×</button></div>
+    <p id="preview-summary" class="form-intro"></p><p id="preview-warnings" role="status"></p><ul id="preview-list" class="preview-list"></ul>
+    <p id="generation-error" role="alert"></p><button id="confirm-generation" class="primary save" disabled>Registrar pendientes</button>
+  </dialog>
+  <dialog id="budget-dialog" aria-labelledby="budget-title"><form id="budget-form">
+    <div class="dialog-heading"><h2 id="budget-title">Nuevo límite mensual</h2><button type="button" data-close="budget-dialog" class="close" aria-label="Cerrar presupuesto">×</button></div>
+    <p class="form-intro">Un límite por categoría y mes. No mueve dinero ni cambia tus saldos.</p>
+    <label>Mes<input name="month" type="month" min="0001-01" max="9999-12" required></label>
+    <label>Categoría<select name="category" required></select></label>
+    <label>Límite (COP)<input name="amount" type="text" inputmode="numeric" maxlength="24" required placeholder="500.000"></label>
+    <p class="field-help">Pesos enteros. Puedes escribir 500000 o 500.000.</p>
+    <p id="budget-error" role="alert"></p><button class="primary save" type="submit">Guardar límite</button>
+  </form></dialog>
+  <dialog id="goal-dialog" aria-labelledby="goal-title"><form id="goal-form">
+    <div class="dialog-heading"><h2 id="goal-title">Nueva meta</h2><button type="button" data-close="goal-dialog" class="close" aria-label="Cerrar meta">×</button></div>
+    <label>Nombre<input name="name" required maxlength="60" placeholder="Ej. Fondo de emergencia"></label>
+    <label>Objetivo (COP)<input name="targetAmount" type="text" inputmode="numeric" maxlength="24" required placeholder="1.000.000"></label>
+    <div class="form-grid"><label>Inicio<input name="startDate" type="date" min="0001-01-01" max="9999-12-31" required></label><label>Fecha objetivo opcional<input name="targetDate" type="date" min="0001-01-01" max="9999-12-31"></label></div>
+    <p id="goal-error" role="alert"></p><button class="primary save" type="submit">Guardar meta</button>
+  </form></dialog>
+  <dialog id="contribution-dialog" aria-labelledby="contribution-title"><form id="contribution-form">
+    <div class="dialog-heading"><h2 id="contribution-title">Registrar aporte</h2><button type="button" data-close="contribution-dialog" class="close" aria-label="Cerrar aporte">×</button></div>
+    <p id="contribution-goal" class="form-intro"></p><p class="field-help">Este registro no mueve dinero ni afecta tus cuentas.</p>
+    <label>Monto (COP)<input name="amount" type="text" inputmode="numeric" maxlength="24" required placeholder="50.000"></label>
+    <label>Fecha<input name="date" type="date" min="0001-01-01" max="9999-12-31" required></label>
+    <label>Nota<input name="note" required maxlength="120" placeholder="Ej. Aporte de noviembre"></label>
+    <p id="contribution-error" role="alert"></p><button class="primary save" type="submit">Guardar aporte</button>
+  </form></dialog>
+  <dialog id="goal-history" aria-labelledby="goal-history-title">
+    <div class="dialog-heading"><h2 id="goal-history-title">Historial de aportes</h2><button type="button" data-close="goal-history" class="close" aria-label="Cerrar historial">×</button></div>
+    <p class="form-intro">Incluye todas las fechas, también las posteriores al mes seleccionado. Editar o eliminar un aporte corrige el seguimiento y no altera cuentas.</p>
+    <ul id="contribution-list" class="preview-list"></ul><p id="history-error" role="alert"></p>
+  </dialog>
+  <dialog id="debt-dialog" aria-labelledby="debt-title"><form id="debt-form">
+    <div class="dialog-heading"><h2 id="debt-title">Nueva deuda</h2><button type="button" data-close="debt-dialog" class="close" aria-label="Cerrar deuda">×</button></div>
+    <label>Nombre<input name="name" required maxlength="60" placeholder="Ej. Compra a cuotas"></label>
+    <label>Acreedor<input name="creditor" required maxlength="100" placeholder="Persona o entidad"></label>
+    <label>Total acordado (COP)<input name="amount" type="text" inputmode="numeric" maxlength="24" required placeholder="1.000.000"></label>
+    <label>Número de cuotas mensuales<input name="installments" type="text" inputmode="numeric" maxlength="3" required value="1"></label>
+    <div class="form-grid"><label>Inicio<input name="startDate" type="date" required min="0001-01-01" max="9999-12-31"></label><label>Primera cuota<input name="firstDueDate" type="date" required min="0001-01-01" max="9999-12-31"></label></div>
+    <p class="field-help">Crear la deuda no mueve dinero. El total debe incluir los cargos que hayas acordado. De 1 a 360 cuotas; el redondeo se distribuye en pesos enteros.</p>
+    <p id="debt-error" role="alert"></p><button class="primary save" type="submit">Guardar deuda</button>
+  </form></dialog>
+  <dialog id="debt-payment-dialog"><form id="debt-payment-form">
+    <div class="dialog-heading"><h2>Registrar pago</h2><button type="button" data-close="debt-payment-dialog" class="close" aria-label="Cerrar pago">×</button></div>
+    <p id="payment-debt-name" class="form-intro"></p>
+    <label>Cómo registrar<select name="mode"><option value="new">Crear un gasto y asociarlo</option><option value="existing">Asociar un gasto existente</option></select></label>
+    <label id="existing-expense-label" hidden>Gasto existente<select name="transactionId" disabled></select></label>
+    <fieldset id="new-payment-fields">
+      <label>Monto (COP)<input name="amount" type="text" inputmode="numeric" maxlength="24" required placeholder="50.000"></label>
+      <label>Fecha<input name="date" type="date" required min="0001-01-01" max="9999-12-31"></label>
+      <label>Cuenta<select name="accountId" required></select></label>
+      <label>Categoría<select name="category" required></select></label>
+      <label>Descripción<input name="description" required maxlength="120"></label>
+    </fieldset>
+    <p class="field-help">Un gasto completo solo puede pagar una deuda. No se permite superar el total pendiente, incluidos pagos futuros ya registrados.</p>
+    <p id="debt-payment-error" role="alert"></p><button class="primary save" type="submit">Guardar pago</button>
+  </form></dialog>
+  <dialog id="debt-history" aria-labelledby="debt-history-title">
+    <div class="dialog-heading"><h2 id="debt-history-title">Cuotas y pagos</h2><button type="button" data-close="debt-history" class="close" aria-label="Cerrar cuotas">×</button></div>
+    <h3>Plan de cuotas al cierre del mes</h3><ul id="installment-list" class="preview-list"></ul>
+    <h3>Pagos asociados</h3><p class="field-help">Incluye pagos futuros. Desvincular conserva el gasto y aumenta el pendiente de la deuda. Edita o elimina el gasto desde Movimientos.</p>
+    <ul id="debt-payment-list" class="preview-list"></ul><p id="debt-history-error" role="alert"></p>
+  </dialog>
+  <script type="module" src="/app.js"></script>
+</body></html>
