@@ -20,3 +20,6 @@ node-compile-cache/
 publication-worktree/
 *.tmp
 mwg-guide-*.md
+
+/lan.env
+/certs/

@@ -1,3 +1,4 @@
+import { prepareImport } from '../../../domain/import-plan.js';
 import { createTransactionStore, storageKey } from '../../data/legacy-store.js';
 import { createLedgerStore } from '../../data/api-store.js';
 import {
@@ -18,7 +19,11 @@ export function createBackupsController({
   today,
   notify,
   clearFilters,
+  isReady,
+  isSaving,
+  isProcessing,
 }) {
+  let pendingImport = null;
   function downloadBackup(backup, suffix = '') {
     const url = URL.createObjectURL(
       new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }),
@@ -45,59 +50,83 @@ export function createBackupsController({
     }
   };
   $('#import').onclick = () => $('#backup-file').click();
+
   $('#backup-file').onchange = async () => {
     const file = $('#backup-file').files[0];
-    if (!file) return;
+    if (!file || !isReady() || isSaving() || isProcessing()) return;
     setProcessing(true);
-    setBusy();
+    $('#import-feedback').textContent = '';
+    pendingImport = null;
     try {
-      if (file.size > 5 * 1024 * 1024) throw new Error('El archivo supera el límite de 5 MB.');
-      const incoming = parseLedgerBackup(await file.text());
-      const next = mergeLedger(getState(), incoming);
-      const fields = [
-        'accounts',
-        'transactions',
-        'transfers',
-        'categories',
-        'recurrences',
-        'budgets',
-        'goals',
-        'contributions',
-        'debts',
-        'debtPayments',
-      ];
-      const added = Object.fromEntries(
-        fields.map((field) => [field, Math.max(0, next[field].length - getState()[field].length)]),
+      if (file.size > 5 * 1024 * 1024) throw new Error('El archivo supera 5 MB.');
+      const text = await file.text();
+      const plan = prepareImport(getState(), text);
+      if (!plan.changed) {
+        $('#import-feedback').textContent =
+          'Este respaldo ya está cargado. No hay cambios que importar.';
+        return;
+      }
+      pendingImport = { text, baseline: JSON.stringify(getState()) };
+      $('#import-file-name').textContent = file.name;
+      $('#import-preview-rows').replaceChildren(
+        ...plan.rows.map((item) => {
+          const row = document.createElement('tr');
+          for (const value of [item.label, item.current, item.incoming, item.result]) {
+            const cell = document.createElement('td');
+            cell.textContent = String(value);
+            row.append(cell);
+          }
+          return row;
+        }),
       );
-      if (
-        fields.every((field) => JSON.stringify(next[field]) === JSON.stringify(getState()[field]))
-      ) {
-        notify('El respaldo no contiene registros nuevos.');
-        return;
-      }
-      if (
-        !confirm(
-          `Se integrará el respaldo: ${added.accounts} cuentas, ${added.transactions} movimientos, ${added.transfers} transferencias, ${added.categories} categorías, ${added.recurrences} reglas, ${added.budgets} presupuestos, ${added.goals} metas y ${added.contributions} aportes, ${added.debts} deudas y ${added.debtPayments} pagos adicionales. En una instalación vacía se restaurará su configuración. ¿Continuar?`,
-        )
-      )
-        return;
-      if (await persist(next)) {
-        const dates = [...incoming.transactions, ...incoming.transfers]
-          .map((item) => item.date)
-          .sort();
-        if (dates.length) $('#month').value = dates.at(-1).slice(0, 7);
-        clearFilters();
-        render();
-        notify('Respaldo importado. Cuentas y movimientos conservados sin duplicados.');
-      }
+      $('#import-result-balance').textContent =
+        'Saldo total resultante, incluidos registros futuros: ' +
+        new Intl.NumberFormat('es-CO', {
+          style: 'currency',
+          currency: 'COP',
+          maximumFractionDigits: 0,
+        }).format(plan.totalBalance);
+      $('#import-preview-error').textContent = '';
+      $('#import-preview-dialog').showModal();
     } catch (error) {
-      notify(error instanceof SyntaxError ? 'El archivo no contiene JSON válido.' : error.message);
+      $('#import-feedback').textContent =
+        error instanceof SyntaxError ? 'El archivo no contiene JSON válido.' : error.message;
     } finally {
-      setProcessing(false);
       $('#backup-file').value = '';
+      setProcessing(false);
       setBusy();
     }
   };
+  $('#confirm-import').addEventListener('click', async () => {
+    if (!pendingImport || !isReady() || isSaving() || isProcessing()) return;
+    if (JSON.stringify(getState()) !== pendingImport.baseline) {
+      $('#import-preview-error').textContent =
+        'Los datos cambiaron. Cancela y selecciona de nuevo el respaldo para revisar las cantidades.';
+      return;
+    }
+    setProcessing(true);
+    try {
+      const plan = prepareImport(getState(), pendingImport.text);
+      downloadBackup(ledgerBackup(getState()), '-antes-de-importar');
+      if (await persist(plan.next)) {
+        $('#import-preview-dialog').close();
+        if (plan.lastDate) $('#month').value = plan.lastDate.slice(0, 7);
+        clearFilters();
+        render();
+        $('#import-feedback').textContent =
+          'Datos cargados correctamente. Se conservaron los registros existentes sin duplicados.';
+        notify('Importación completada.');
+      }
+    } catch (error) {
+      $('#import-preview-error').textContent = error.message;
+    } finally {
+      setProcessing(false);
+      setBusy();
+    }
+  });
+  $('#import-preview-dialog').addEventListener('close', () => {
+    pendingImport = null;
+  });
   $('#migrate').onclick = async () => {
     setProcessing(true);
     setBusy();

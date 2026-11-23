@@ -9,7 +9,7 @@ export function sendJson(response, status, value) {
   response.end(JSON.stringify(value));
 }
 
-export function localRequest(request) {
+export function localRequest(request, allowedHosts = []) {
   const host = request.headers.host;
   let address;
   try {
@@ -24,7 +24,8 @@ export function localRequest(request) {
     address.pathname !== '/' ||
     address.search ||
     address.hash ||
-    !['localhost', '127.0.0.1', '[::1]'].includes(address.hostname)
+    (!['localhost', '127.0.0.1', '[::1]'].includes(address.hostname) &&
+      !allowedHosts.includes(host))
   )
     throw new DataError('Acceso local requerido.', 403);
   if (request.headers['sec-fetch-site'] === 'cross-site')
@@ -33,7 +34,8 @@ export function localRequest(request) {
 }
 
 export async function readJson(request, host) {
-  if (request.headers.origin && request.headers.origin !== `http://${host}`)
+  const scheme = request.socket?.encrypted ? 'https' : 'http';
+  if (request.headers.origin && request.headers.origin !== `${scheme}://${host}`)
     throw new DataError('Origen no permitido.', 403);
   if (request.headers['content-type']?.split(';')[0].trim() !== 'application/json')
     throw new DataError('Se requiere JSON.', 415);

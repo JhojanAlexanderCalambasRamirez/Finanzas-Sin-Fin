@@ -148,6 +148,9 @@ const movements = createMovementsController({
 const dashboard = createDashboardController({ $, getState, isReady, money });
 const loans = createLoansController({ $ });
 const backups = createBackupsController({
+  isReady,
+  isSaving,
+  isProcessing,
   $,
   getState,
   setProcessing,
@@ -219,7 +222,7 @@ async function initialize() {
   setBusy();
   try {
     await session.load();
-    $('.private').textContent = 'Guardado en este equipo';
+    $('.private').textContent = 'Datos cargados del servidor';
     notify('Cuentas y movimientos cargados.');
     try {
       const local = createTransactionStore(localStorage).load();

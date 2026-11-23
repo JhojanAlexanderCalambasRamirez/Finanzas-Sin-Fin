@@ -920,3 +920,28 @@ td:last-child .secondary {
   text-decoration: underline;
   color: var(--accent);
 }
+
+.sharing-panel {
+  margin-block-start: 1.5rem;
+}
+.sharing-steps {
+  padding-inline: 2.5rem;
+  max-inline-size: 80ch;
+  font-size: 0.9rem;
+}
+.sharing-steps li {
+  margin-block: 0.75rem;
+}
+#import-preview-dialog {
+  inline-size: min(48rem, calc(100% - 2rem));
+}
+#import-preview-dialog h1 {
+  font-size: 1.4rem;
+}
+#import-preview-error {
+  color: #a02d26;
+}
+#import-feedback {
+  flex-basis: 100%;
+  font-size: 0.9rem;
+}

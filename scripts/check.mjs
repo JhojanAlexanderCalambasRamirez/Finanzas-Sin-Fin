@@ -20,6 +20,7 @@ for (const file of files) {
   if (check.status !== 0) process.exit(check.status || 1);
 }
 const html = readFileSync('src/web/index.html', 'utf8');
+if (!/<\/html>\s*$/.test(html)) throw new Error('Hay contenido fuera del documento HTML');
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
 if (new Set(ids).size !== ids.length)
   throw new Error('index.html contiene identificadores duplicados');

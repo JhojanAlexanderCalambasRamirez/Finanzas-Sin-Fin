@@ -159,3 +159,15 @@ Los datos del test HTTP se crean en una base temporal separada y se eliminan al 
 - [x] 92 pruebas aprobadas: 52 unitarias y 40 de integracion.
 - [x] Pagina, 32 modulos, salud y API devuelven 200 en 3081, sin escrituras financieras de prueba.
 - [ ] Revision visual real y prueba completa en Docker.
+
+## Acceso LAN e importacion 0.12
+
+- [x] PC central con hosts explicitos, HTTPS y autenticacion HTTP compartida.
+- [x] Credenciales obligatorias y limite temporal de intentos.
+- [x] Prueba HTTPS real con certificado exclusivo de pruebas: lectura y escritura autorizadas.
+- [x] Vista previa de importacion, cancelacion sin cambios y confirmacion explicita.
+- [x] Repeticion sin duplicados, errores y respaldo previo.
+- [x] 97 pruebas aprobadas: 56 unitarias y 41 de integracion.
+- [ ] Configurar certificado confiable, direccion y contraseña reales en el PC central.
+- [ ] Validar conexion fisica entre tus PC, firewall y navegador.
+- [ ] Multiusuario aislado, sesiones de aplicacion y publicacion por Internet.

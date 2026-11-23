@@ -8,14 +8,15 @@ export function renderBusyState(
   $('.private').textContent = saving
     ? 'Guardando…'
     : ready
-      ? 'Datos cargados en este equipo'
+      ? 'Datos cargados del servidor'
       : 'Sin conexión confirmada';
-  $('#reload-data').hidden = ready || saving;
+  $('#reload-data').hidden = false;
+  $('#reload-data').textContent = ready ? 'Actualizar datos' : 'Reconectar';
   $('#reload-data').disabled = saving || processing;
   for (const form of document.querySelectorAll('dialog form'))
     form.setAttribute('aria-busy', String(saving));
   for (const button of document.querySelectorAll(
-    '#add, #first, #new-account, #new-category, #new-rule, #new-fixed-expense, #fixed-cards button, #new-budget, #copy-budgets, #new-goal, #new-debt, #debt-cards button, #debt-payment-list button, #goal-cards button, #contribution-list button, #budget-cards button, #preview-rules, #export, #import, #migrate, #rows button, #account-cards button, #category-list button, #rule-list button, button[type="submit"]',
+    '#add, #first, #new-account, #new-category, #new-rule, #new-fixed-expense, #fixed-cards button, #new-budget, #copy-budgets, #new-goal, #new-debt, #debt-cards button, #debt-payment-list button, #goal-cards button, #contribution-list button, #budget-cards button, #preview-rules, #export, #import, #confirm-import, #migrate, #rows button, #account-cards button, #category-list button, #rule-list button, button[type="submit"]',
   ))
     button.disabled = disabled;
   $('#confirm-generation').disabled = disabled || !pendingRecurrences;

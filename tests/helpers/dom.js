@@ -39,6 +39,7 @@ export function createDomDouble(knownIds = null) {
       this.listeners.set(name, listener);
     }
     focus() {}
+    click() {}
     reset() {}
     showModal() {
       this.open = true;

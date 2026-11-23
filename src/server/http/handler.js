@@ -4,12 +4,14 @@ import { createLedgerService } from '../../application/ledger-service.js';
 import { resolveAsset } from './static-assets.js';
 import { sendJson, localRequest } from './protocol.js';
 import { handleLedgerRequest } from './ledger-routes.js';
+import { createAccessGuard } from '../access.js';
 
-export function createHandler(repository) {
+export function createHandler(repository, options = {}) {
   const service = createLedgerService(repository);
+  const guard = createAccessGuard(options);
   return async (request, response) => {
     try {
-      const { host, path } = localRequest(request);
+      const { host, path } = localRequest(request, options.allowedHosts);
       if (path === '/health' && request.method === 'GET') {
         const healthy = service.health();
         return sendJson(response, healthy ? 200 : 503, {
@@ -17,6 +19,7 @@ export function createHandler(repository) {
           storage: 'sqlite',
         });
       }
+      guard(request, response);
       if (path === '/api/transactions' || path === '/api/state')
         return await handleLedgerRequest(request, response, { service, path, host });
       if (!['GET', 'HEAD'].includes(request.method))

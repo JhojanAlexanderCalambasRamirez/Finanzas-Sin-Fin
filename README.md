@@ -27,7 +27,7 @@ Permite registrar movimientos, comparar meses y seguir obligaciones sin depender
 | Informes | Evolución de seis meses y CSV del listado filtrado. |
 | Respaldos | JSON completo, compatibilidad y detección de conflictos. |
 
-**Estado: versión 0.11, en desarrollo.** Funciona como un único espacio personal local. Quedan pruebas visuales completas, certificación de Docker y préstamos reales con desembolso y separación de capital/intereses. Autenticación y multiusuario están pendientes. Consulta [MVP.md](MVP.md).
+**Estado: versión 0.12, en desarrollo.** Funciona como un único espacio personal local. Quedan pruebas visuales completas, certificación de Docker y préstamos reales con desembolso y separación de capital/intereses. El modo LAN incorpora acceso compartido; multiusuario aislado y sesiones de aplicación siguen pendientes. Consulta [MVP.md](MVP.md).
 
 ## Tecnologías
 
@@ -161,7 +161,7 @@ Consulta [ARCHITECTURE.md](docs/ARCHITECTURE.md) para las reglas de dependencias
 
 ## Seguridad y límites
 
-Un único espacio financiero local, sin autenticación. La API valida hosts locales, entradas, referencias, tamaño de solicitud y revisiones. Docker usa un usuario sin privilegios y archivos de aplicación de solo lectura.
+Un único espacio financiero personal: modo local sin credenciales y modo LAN con HTTPS y autenticación HTTP compartida. La API valida hosts locales, entradas, referencias, tamaño de solicitud y revisiones. Docker usa un usuario sin privilegios y archivos de aplicación de solo lectura.
 
 No expongas esta versión directamente a Internet. Ofrecerla a terceros requiere identidad, sesiones, aislamiento de datos y HTTPS. Bases, respaldos, `.env` y cachés están excluidos de Git.
 
@@ -198,3 +198,11 @@ Registrar gasto del mes requiere confirmar y crea un unico gasto con la fecha pr
 No se asocian gastos manuales por coincidencia de nombre. Si ya registraste el gasto manualmente, revisa Movimientos y no lo vuelvas a crear. Las cuotas de deudas existentes se pagan desde Deudas para conservar su vinculacion. Pausar o editar la regla afecta el plan mostrado; no existe un historial inmutable de planes mensuales.
 
 Comprobacion local: la instancia anterior sigue en 3080; la version actual se verifico por HTTP en http://127.0.0.1:3081/. El puerto predeterminado de una instalacion Docker nueva continua siendo 3080.
+
+## Una misma base desde varios PC
+
+El modo de red local permite usar un PC central y acceder desde los otros navegadores con HTTPS y autenticacion HTTP compartida. Es un solo espacio financiero personal, no cuentas independientes por usuario. El modo local predeterminado se conserva.
+
+Configura lan.env a partir de lan.env.example, proporciona tu certificado confiable y clave en certs/, y ejecuta npm run start:lan en el PC central. Consulta [la guia completa](docs/LOCAL-NETWORK.md). No se abren puertos ni se instalan certificados automaticamente.
+
+La seccion Mis datos y equipos explica el flujo. Importar respaldo muestra una tabla de cantidades y saldo resultante antes de confirmar, prepara una descarga del estado anterior y rechaza conflictos. Actualizar datos recarga la informacion compartida; no hay sincronizacion en tiempo real.

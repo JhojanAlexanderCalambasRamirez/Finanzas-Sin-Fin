@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createDomDouble } from '../helpers/dom.js';
-import { defaultAccount } from '../../src/domain/ledger.js';
+import { defaultAccount, ledgerBackup } from '../../src/domain/ledger.js';
 import { defaultCategories } from '../../src/domain/movement-tools.js';
 
 test('frontend compone todos los controladores y el simulador responde sin variables globales implicitas', async () => {
@@ -104,6 +104,38 @@ test('frontend compone todos los controladores y el simulador responde sin varia
     await form.trigger('submit');
     assert.equal(dom.query('#loan-result').hidden, true);
     assert.ok(dom.query('#loan-error').textContent.length > 0);
+    const importState = {
+      ...remote,
+      transactions: [
+        ...remote.transactions,
+        {
+          id: 'import-income',
+          type: 'income',
+          accountId: 'principal',
+          category: 'Salario',
+          description: 'Ingreso importado',
+          amount: 20000,
+          date: '2026-11-24',
+        },
+      ],
+    };
+    const backupText = JSON.stringify(ledgerBackup(importState));
+    dom.query('#backup-file').files = [
+      { name: 'respaldo.json', size: backupText.length, text: async () => backupText },
+    ];
+    await dom.query('#backup-file').trigger('change');
+    assert.equal(dom.query('#import-preview-dialog').open, true);
+    assert.equal(remote.transactions.length, 2, 'La vista previa no escribe datos');
+    dom.query('#import-preview-dialog').close();
+    await dom.query('#confirm-import').trigger('click');
+    assert.equal(remote.transactions.length, 2, 'Cancelar conserva el estado');
+    await dom.query('#backup-file').trigger('change');
+    await dom.query('#confirm-import').trigger('click');
+    assert.equal(remote.transactions.length, 3);
+    assert.match(dom.query('#import-feedback').textContent, /correctamente/);
+    await dom.query('#backup-file').trigger('change');
+    assert.equal(remote.transactions.length, 3);
+    assert.match(dom.query('#import-feedback').textContent, /ya está cargado/);
   } finally {
     for (const key of keys) {
       const descriptor = previous.get(key);

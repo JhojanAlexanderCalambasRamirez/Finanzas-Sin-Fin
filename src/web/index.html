@@ -25,6 +25,7 @@
         <a class="nav" href="#reports-panel">▧ <span>Informes</span></a>
         <a class="nav" href="#loans-panel"><span>Simular préstamo</span></a>
         <a class="nav" href="#category-management"><span>Categorías</span></a>
+        <a class="nav" href="#sharing-panel"><span>Mis datos y equipos</span></a>
         <a class="nav" href="#backups"><span>Respaldos</span></a>
       </nav>
       <div class="sidebar-note">
@@ -428,7 +429,40 @@
         </div>
         <ul id="category-list" class="category-list"></ul>
       </section>
+      <section class="panel sharing-panel" id="sharing-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Mis datos en otros equipos</h2>
+            <p>Una sola aplicación central, la misma información desde tus PC.</p>
+          </div>
+        </div>
+        <ol class="sharing-steps">
+          <li>
+            Elige un PC que permanezca encendido y configura en él el modo de red local con HTTPS y
+            acceso protegido.
+          </li>
+          <li>
+            Abre su dirección HTTPS desde los otros equipos e inicia sesión cuando lo solicite el
+            navegador. No uses localhost en los otros PC.
+          </li>
+          <li>
+            Para trasladar tus registros actuales, exporta el JSON completo e impórtalo una sola vez
+            en el servidor central.
+          </li>
+        </ol>
+        <p class="budget-note">
+          Cada navegador consulta la misma base central. Recarga para ver cambios de otro equipo; si
+          editan a la vez se rechaza la revisión antigua. Los respaldos sirven para migrar y
+          recuperar, no para sincronizar instalaciones independientes.
+        </p>
+        <p class="budget-note">
+          La dirección de esta instancia es la que aparece en tu navegador. El administrador
+          configura la dirección de red permitida; esta página no abre puertos ni comparte la base
+          automáticamente.
+        </p>
+      </section>
       <section class="backup-bar" id="backups" aria-label="Respaldo de datos">
+        <p id="import-feedback" role="status"></p>
         <button id="export" class="secondary" disabled>Exportar respaldo</button
         ><button id="import" class="secondary" disabled>Importar respaldo</button
         ><button id="migrate" class="secondary" hidden>Migrar registros del navegador</button
@@ -916,6 +950,41 @@
         ><button id="confirm-budget-copy" type="button" class="primary" disabled>
           Confirmar copia
         </button>
+      </div>
+    </dialog>
+    <dialog id="import-preview-dialog" aria-labelledby="import-preview-title">
+      <h1 id="import-preview-title">Revisa los datos antes de cargarlos</h1>
+      <p id="import-file-name"></p>
+      <p>
+        Se integrarán los datos del archivo con los actuales. Si hay conflictos, no se importará
+        nada.
+      </p>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Resumen de importación">
+        <table>
+          <caption>
+            Comparación antes de importar
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Datos</th>
+              <th scope="col">Actuales</th>
+              <th scope="col">En archivo</th>
+              <th scope="col">Resultado</th>
+            </tr>
+          </thead>
+          <tbody id="import-preview-rows"></tbody>
+        </table>
+      </div>
+      <p id="import-result-balance"></p>
+      <p>
+        Al confirmar se preparará una descarga de respaldo del estado anterior. Comprueba que tu
+        navegador la guarde.
+      </p>
+      <p id="import-preview-error" role="alert"></p>
+      <div class="budget-actions">
+        <button type="button" class="secondary" data-close="import-preview-dialog" autofocus>
+          Cancelar</button
+        ><button type="button" class="primary" id="confirm-import">Confirmar e importar</button>
       </div>
     </dialog>
     <script type="module" src="/src/web/main.js"></script>
