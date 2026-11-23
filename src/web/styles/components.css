@@ -903,3 +903,20 @@ td:last-child .secondary {
   flex: 1;
   min-inline-size: min(100%, 15rem);
 }
+
+.fixed-expenses-panel {
+  margin-block-start: 1.5rem;
+}
+.fixed-card {
+  container-type: inline-size;
+}
+.fixed-card footer {
+  padding: 0;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+}
+.fixed-card footer a {
+  text-decoration: underline;
+  color: var(--accent);
+}

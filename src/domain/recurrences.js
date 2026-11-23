@@ -40,7 +40,7 @@ export function validRecurrences(state) {
     );
   });
 }
-function occurrence(rule, index) {
+export function recurrenceDate(rule, index) {
   if (rule.frequency === 'weekly') {
     const date = new Date(`${rule.startDate}T12:00:00Z`);
     date.setUTCDate(date.getUTCDate() + index * 7);
@@ -74,7 +74,7 @@ export function previewRecurrences(state, through) {
     const generated = new Set(rule.generatedDates);
     const limit = rule.endDate && rule.endDate < through ? rule.endDate : through;
     for (let index = 0; ; index++) {
-      const date = occurrence(rule, index);
+      const date = recurrenceDate(rule, index);
       if (!date || date > limit) break;
       if (generated.has(date)) continue;
       const id = `rec:${rule.id}:${date}`;

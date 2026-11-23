@@ -18,6 +18,7 @@
         <a class="nav" href="#accounts">▣ <span>Cuentas</span></a>
         <a class="nav" href="#movements">⇄ <span>Movimientos</span></a>
         <a class="nav" href="#budgets-panel">▤ <span>Presupuestos</span></a>
+        <a class="nav" href="#fixed-expenses-panel"><span>Gastos fijos</span></a>
         <a class="nav" href="#recurring-panel">↻ <span>Recurrentes</span></a>
         <a class="nav" href="#goals-panel">◎ <span>Metas</span></a>
         <a class="nav" href="#debts-panel">▥ <span>Deudas</span></a>
@@ -237,6 +238,29 @@
         <p class="budget-note">
           Los ingresos, transferencias y saldos iniciales no consumen presupuesto. Los gastos sin
           límite asignado se muestran por separado.
+        </p>
+      </section>
+      <section class="panel fixed-expenses-panel" id="fixed-expenses-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Gastos fijos del mes</h2>
+            <p>Transporte público, corte de cabello, suscripciones y cuotas mensuales.</p>
+          </div>
+          <button id="new-fixed-expense" class="secondary" type="button" disabled>
+            + Nuevo gasto fijo
+          </button>
+        </div>
+        <p id="fixed-summary" class="budget-summary"></p>
+        <p class="budget-note">
+          Plan basado en tus reglas mensuales de gasto activas. Registrar crea un gasto con la fecha
+          prevista y afecta tu saldo; no es una reserva ni confirma un pago bancario. Si ya lo
+          registraste manualmente, revisa Movimientos antes de repetirlo. Para cuotas de una deuda
+          ya creada, registra su pago en Deudas.
+        </p>
+        <div id="fixed-cards" class="account-cards"></div>
+        <p id="fixed-empty" class="budget-note">
+          Crea tus gastos habituales para conocer cuánto necesitas cubrir cada mes. Las reglas
+          pausadas o finalizadas no se incluyen.
         </p>
       </section>
       <section class="panel recurring-panel" id="recurring-panel">

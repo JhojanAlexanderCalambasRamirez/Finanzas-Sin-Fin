@@ -149,3 +149,13 @@ Los datos del test HTTP se crean en una base temporal separada y se eliminan al 
 - [x] Grafo HTTP de modulos y rechazo de rutas privadas.
 - [x] Bootstrap web con DOM simulado, apertura de formularios, registro y simulacion.
 - [ ] Validacion visual completa y construccion Docker en un entorno con acceso al motor.
+
+## Gastos fijos 0.11
+
+- [x] Plan mensual de transporte, cabello y cuotas con importe previsto, registrado y pendiente.
+- [x] Reutilizar reglas mensuales, pausa, fecha final y deduplicacion existentes.
+- [x] Registrar solo el mes confirmado y conservar vinculos en SQLite y respaldo.
+- [x] Detectar importes parciales, registros eliminados y categorias archivadas.
+- [x] 92 pruebas aprobadas: 52 unitarias y 40 de integracion.
+- [x] Pagina, 32 modulos, salud y API devuelven 200 en 3081, sin escrituras financieras de prueba.
+- [ ] Revision visual real y prueba completa en Docker.

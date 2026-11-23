@@ -27,7 +27,7 @@ Permite registrar movimientos, comparar meses y seguir obligaciones sin depender
 | Informes | Evolución de seis meses y CSV del listado filtrado. |
 | Respaldos | JSON completo, compatibilidad y detección de conflictos. |
 
-**Estado: versión 0.10, en desarrollo.** Funciona como un único espacio personal local. Quedan pruebas visuales completas, certificación de Docker y préstamos reales con desembolso y separación de capital/intereses. Autenticación y multiusuario están pendientes. Consulta [MVP.md](MVP.md).
+**Estado: versión 0.11, en desarrollo.** Funciona como un único espacio personal local. Quedan pruebas visuales completas, certificación de Docker y préstamos reales con desembolso y separación de capital/intereses. Autenticación y multiusuario están pendientes. Consulta [MVP.md](MVP.md).
 
 ## Tecnologías
 
@@ -188,3 +188,13 @@ Desarrollo con asistencia de Codex. Node.js, SQLite y Docker pertenecen a sus re
 En Presupuestos, selecciona el periodo destino y pulsa Copiar mes anterior. La vista previa muestra categorias e importes y requiere confirmacion. Solo copia limites de categorias activas que aun no tienen presupuesto en el destino. No copia gastos ni modifica limites existentes; repetir la operacion no duplica registros.
 
 Verificacion de esta entrega: [docs/VALIDATION.md](docs/VALIDATION.md).
+
+## Gastos fijos mensuales
+
+En Gastos fijos puedes crear planes para transporte publico, cabello, suscripciones y cuotas. Se reutilizan las reglas mensuales de gasto activas: no hay un segundo calendario ni una nueva base de datos. La vista del mes muestra previsto, registrado y pendiente.
+
+Registrar gasto del mes requiere confirmar y crea un unico gasto con la fecha prevista. No genera meses anteriores, no reserva dinero ni ejecuta pagos bancarios. Las recurrencias generales reconocen esa fecha y no la repiten. Si el registro se edita por menos importe, se muestra el faltante; si se elimina o cambia de mes/tipo, se avisa y no se regenera automaticamente.
+
+No se asocian gastos manuales por coincidencia de nombre. Si ya registraste el gasto manualmente, revisa Movimientos y no lo vuelvas a crear. Las cuotas de deudas existentes se pagan desde Deudas para conservar su vinculacion. Pausar o editar la regla afecta el plan mostrado; no existe un historial inmutable de planes mensuales.
+
+Comprobacion local: la instancia anterior sigue en 3080; la version actual se verifico por HTTP en http://127.0.0.1:3081/. El puerto predeterminado de una instalacion Docker nueva continua siendo 3080.

@@ -53,7 +53,7 @@ Solo se publican JavaScript y CSS de `src/domain` y `src/web`, además del docum
 
 `src/web/main.js` es la raíz de composición: crea sesión y controladores, conecta sus callbacks y coordina el renderizado. No almacena estados de edición de metas, pagos o presupuestos.
 
-Cada carpeta de `features` tiene su controlador: `accounts`, `movements`, `categories`, `budgets`, `recurrences`, `goals`, `debts`, `reports`, `dashboard`, `loans` y `backups`. Sus variables de edición quedan en el cierre privado de su fábrica.
+Cada carpeta de `features` tiene su controlador: `accounts`, `movements`, `categories`, `budgets`, `recurrences`, `goals`, `debts`, `reports`, `dashboard`, `loans`, `fixed-expenses` y `backups`. Sus variables de edición quedan en el cierre privado de su fábrica.
 
 Los controladores reciben únicamente las capacidades que usan: consultar estado, guardar, notificar, solicitar renderizado y utilidades de presentación. No reciben un contenedor global de toda la aplicación ni importan controladores hermanos.
 
@@ -71,7 +71,7 @@ El HTML sigue siendo un documento estático de composición, con diálogos nativ
 6. Añadir pruebas de reglas, persistencia y recorrido de integración apropiadas.
 7. Ejecutar `npm run check` y `npm test`, y comprobar el flujo visual afectado.
 
-El bloque de gastos fijos mensuales continúa pendiente; esta refactorización no lo marca como implementado.
+El módulo fixed-expenses reutiliza las recurrencias mensuales y sus identificadores. No introduce tablas ni duplica calendarios; sus reglas y controlador están separados como las demás funcionalidades.
 
 ## Validación y límites
 

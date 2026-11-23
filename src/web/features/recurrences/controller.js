@@ -201,6 +201,18 @@ export function createRecurrencesController({
 
   return {
     render: renderRules,
+    editRule(id) {
+      const rule = recurrenceList(getState()).find((item) => item.id === id);
+      if (rule) openRule(rule);
+    },
+    openMonthlyExpense(month) {
+      openRule();
+      $('#rule-title').textContent = 'Nuevo gasto fijo mensual';
+      ruleForm.elements.type.value = 'expense';
+      ruleForm.elements.frequency.value = 'monthly';
+      ruleForm.elements.startDate.value = month + '-01';
+      ruleForm.elements.category.value = 'Transporte';
+    },
     get pendingCount() {
       return previewCount;
     },

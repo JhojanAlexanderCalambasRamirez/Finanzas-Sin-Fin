@@ -1,3 +1,4 @@
+import { createFixedExpensesController } from './features/fixed-expenses/controller.js';
 import { renderBusyState } from './shared/busy-state.js';
 import { createLedgerStore } from './data/api-store.js';
 import { createTransactionStore } from './data/legacy-store.js';
@@ -83,6 +84,20 @@ const recurrences = createRecurrencesController({
   notify,
   clearFilters,
 });
+const fixedExpenses = createFixedExpensesController({
+  $,
+  getState,
+  isReady,
+  isSaving,
+  isProcessing,
+  persist,
+  render,
+  notify,
+  money,
+  accountName,
+  createRule: (month) => recurrences.openMonthlyExpense(month),
+  editRule: (id) => recurrences.editRule(id),
+});
 const budgets = createBudgetsController({
   $,
   getState,
@@ -164,7 +179,9 @@ async function persist(next) {
     notify('Cambios guardados correctamente.');
     return true;
   } catch (error) {
-    const message = isReady() ? error.message : 'No se pudo confirmar el guardado. ' + error.message;
+    const message = isReady()
+      ? error.message
+      : 'No se pudo confirmar el guardado. ' + error.message;
     for (const element of document.querySelectorAll('dialog [role="alert"]'))
       element.textContent = message;
     notify(message);
@@ -191,6 +208,7 @@ function render() {
   accounts.render(asOf);
   categories.render();
   recurrences.render();
+  fixedExpenses.render();
   budgets.render();
   goals.render(asOf);
   debts.render(asOf);
